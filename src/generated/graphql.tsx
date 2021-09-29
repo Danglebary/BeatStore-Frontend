@@ -14,6 +14,29 @@ export type Scalars = {
   Float: number;
 };
 
+export type Beat = {
+  __typename?: 'Beat';
+  bpm?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['String'];
+  creatorId: Scalars['Int'];
+  genre?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  key?: Maybe<Scalars['String']>;
+  likes: Scalars['Float'];
+  tags?: Maybe<Array<Scalars['String']>>;
+  title: Scalars['String'];
+  updatedAt: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
+};
+
+export type CreateBeatInput = {
+  bpm?: Maybe<Scalars['Int']>;
+  genre?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Scalars['String']>>;
+  title: Scalars['String'];
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -28,13 +51,16 @@ export type LoginUserInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
+  createBeat: Beat;
   createPost: Post;
+  deleteBeat: Scalars['Boolean'];
   deletePost: Scalars['Boolean'];
   forgotPasswordDev: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
   removeUser: Scalars['Boolean'];
+  updateBeat?: Maybe<Beat>;
   updatePost?: Maybe<Post>;
 };
 
@@ -45,8 +71,18 @@ export type MutationChangePasswordArgs = {
 };
 
 
+export type MutationCreateBeatArgs = {
+  options: CreateBeatInput;
+};
+
+
 export type MutationCreatePostArgs = {
   title: Scalars['String'];
+};
+
+
+export type MutationDeleteBeatArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -75,6 +111,11 @@ export type MutationRemoveUserArgs = {
 };
 
 
+export type MutationUpdateBeatArgs = {
+  options: UpdateBeatInput;
+};
+
+
 export type MutationUpdatePostArgs = {
   id: Scalars['Int'];
   title: Scalars['String'];
@@ -90,11 +131,18 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
+  beat?: Maybe<Beat>;
+  beats: Array<Beat>;
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: Array<Post>;
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryBeatArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -114,8 +162,18 @@ export type RegisterUserInput = {
   username: Scalars['String'];
 };
 
+export type UpdateBeatInput = {
+  bpm?: Maybe<Scalars['Int']>;
+  genre?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  key?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Scalars['String']>>;
+  title?: Maybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
+  beats: Array<Beat>;
   createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Int'];
@@ -136,6 +194,13 @@ export type ErrorSimpleFragment = { __typename?: 'FieldError', field: string, me
 export type UserResponseSimpleFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> };
 
 export type UserSimpleFragment = { __typename?: 'User', id: number, userName: string };
+
+export type CreateBeatMutationVariables = Exact<{
+  options: CreateBeatInput;
+}>;
+
+
+export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'Beat', id: number, title: string, bpm?: Maybe<number>, key?: Maybe<string>, genre?: Maybe<string>, createdAt: string, updatedAt: string } };
 
 export type CreatePostMutationVariables = Exact<{
   title: Scalars['String'];
@@ -211,6 +276,23 @@ export const UserResponseSimpleFragmentDoc = gql`
 }
     ${ErrorSimpleFragmentDoc}
 ${UserSimpleFragmentDoc}`;
+export const CreateBeatDocument = gql`
+    mutation CreateBeat($options: CreateBeatInput!) {
+  createBeat(options: $options) {
+    id
+    title
+    bpm
+    key
+    genre
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+export function useCreateBeatMutation() {
+  return Urql.useMutation<CreateBeatMutation, CreateBeatMutationVariables>(CreateBeatDocument);
+};
 export const CreatePostDocument = gql`
     mutation CreatePost($title: String!) {
   createPost(title: $title) {
