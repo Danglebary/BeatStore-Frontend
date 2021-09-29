@@ -12,6 +12,7 @@ import Wrapper from "../components/Wrapper";
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
 import { useCreateBeatMutation } from "../generated/graphql";
+import { TagInputField } from "../components/TagInputField";
 
 const allKeys = [
     { option: "C major", value: "c_major" },
@@ -78,6 +79,7 @@ const CreateBeat: React.FC<{}> = ({}) => {
                             type="number"
                         />
                         <SelectField name="key" label="key" options={allKeys} />
+                        <TagInputField />
                         <Button type="submit" isLoading={isSubmitting}>
                             upload beat
                         </Button>
