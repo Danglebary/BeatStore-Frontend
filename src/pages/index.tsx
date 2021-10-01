@@ -12,7 +12,11 @@ import { Link } from "@chakra-ui/layout";
 import { Layout } from "../components/Layout";
 
 const Index: React.FC<{}> = () => {
-    const [{ data }] = useBeatsQuery();
+    const [{ data }] = useBeatsQuery({
+        variables: {
+            limit: 10
+        }
+    });
     return (
         <Layout varient="regular">
             <NextLink href="/create-beat">

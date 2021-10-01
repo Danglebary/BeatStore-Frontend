@@ -146,6 +146,12 @@ export type QueryBeatArgs = {
 };
 
 
+export type QueryBeatsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
+
 export type QueryPostArgs = {
   id: Scalars['Int'];
 };
@@ -243,7 +249,10 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> } };
 
-export type BeatsQueryVariables = Exact<{ [key: string]: never; }>;
+export type BeatsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
 export type BeatsQuery = { __typename?: 'Query', beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, creatorId: number, createdAt: string, updatedAt: string }> };
@@ -362,8 +371,8 @@ export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
 export const BeatsDocument = gql`
-    query Beats {
-  beats {
+    query Beats($limit: Int!, $cursor: String) {
+  beats(limit: $limit, cursor: $cursor) {
     id
     title
     genre
