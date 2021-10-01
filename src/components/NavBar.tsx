@@ -9,9 +9,7 @@ import { Button, Link } from "@chakra-ui/react";
 // Custom imports
 import { isServer } from "../utils/isServer";
 
-interface NavBarProps {}
-
-const NavBar: React.FC<NavBarProps> = ({}) => {
+export const NavBar: React.FC = () => {
     const [{ data, fetching: meQueryFetching }] = useMeQuery({
         pause: isServer()
     });
@@ -26,6 +24,9 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
         // user not logged in
         body = (
             <>
+                <NextLink href="/">
+                    <Link>home</Link>
+                </NextLink>
                 <NextLink href="/login">
                     <Link>login</Link>
                 </NextLink>
@@ -39,6 +40,9 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
         body = (
             <>
                 <Box>{data.me.userName}</Box>
+                <NextLink href="/">
+                    <Link>home</Link>
+                </NextLink>
                 <Button
                     variant="link"
                     isLoading={logoutFetching}
@@ -66,5 +70,3 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
         </Flex>
     );
 };
-
-export default NavBar;

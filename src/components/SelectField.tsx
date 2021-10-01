@@ -11,7 +11,7 @@ type SelectFieldProps = SelectHTMLAttributes<HTMLSelectElement> & {
     options: { option: string; value: string }[];
 };
 
-const SelectField: React.FC<SelectFieldProps> = ({
+export const SelectField: React.FC<SelectFieldProps> = ({
     label,
     options,
     ...props
@@ -30,5 +30,3 @@ const SelectField: React.FC<SelectFieldProps> = ({
         </FormControl>
     );
 };
-
-export default SelectField;

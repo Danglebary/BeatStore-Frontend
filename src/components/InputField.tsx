@@ -14,7 +14,7 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
     label: string;
 };
 
-const InputField: React.FC<InputFieldProps> = ({
+export const InputField: React.FC<InputFieldProps> = ({
     label,
     size: _,
     ...props
@@ -33,5 +33,3 @@ const InputField: React.FC<InputFieldProps> = ({
         </FormControl>
     );
 };
-
-export default InputField;

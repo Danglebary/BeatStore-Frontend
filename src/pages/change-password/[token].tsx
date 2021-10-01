@@ -1,6 +1,5 @@
 // General imports
 import React, { useState } from "react";
-import { NextPage } from "next";
 import NextLink from "next/link";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/dist/client/router";
@@ -13,11 +12,11 @@ import { useChangePasswordMutation } from "../../generated/graphql";
 import { Button } from "@chakra-ui/react";
 import { Box, Flex, Link } from "@chakra-ui/layout";
 // Custom imports
-import InputField from "../../components/InputField";
-import Wrapper from "../../components/Wrapper";
+import { Layout } from "../../components/Layout";
+import { InputField } from "../../components/InputField";
 import { toErrorMap } from "../../utils/toErrorMap";
 
-const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
+const ChangePassword: React.FC = () => {
     const router = useRouter();
 
     const [{}, changePassword] = useChangePasswordMutation();
@@ -25,12 +24,15 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
     const [tokenErr, setTokenErr] = useState("");
 
     return (
-        <Wrapper varient="small">
+        <Layout varient="small">
             <Formik
                 initialValues={{ newPassword: "" }}
                 onSubmit={async (values, { setErrors }) => {
                     const res = await changePassword({
-                        token,
+                        token:
+                            typeof router.query.token === "string"
+                                ? router.query.token
+                                : "",
                         newPassword: values.newPassword
                     });
                     if (res.data?.changePassword.errors) {
@@ -68,14 +70,8 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
                     </Form>
                 )}
             </Formik>
-        </Wrapper>
+        </Layout>
     );
-};
-
-ChangePassword.getInitialProps = ({ query }) => {
-    return {
-        token: query.token as string
-    };
 };
 
 export default withUrqlClient(createUrqlClient)(ChangePassword);

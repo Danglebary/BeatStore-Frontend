@@ -9,17 +9,15 @@ import { useForgotPasswordDevMutation } from "../generated/graphql";
 // Chakra imports
 import { Button, Box } from "@chakra-ui/react";
 // Custom imports
-import InputField from "../components/InputField";
-import Wrapper from "../components/Wrapper";
+import { Layout } from "../components/Layout";
+import { InputField } from "../components/InputField";
 
-interface ForgotPasswordProps {}
-
-const ForgotPassword: React.FC<ForgotPasswordProps> = ({}) => {
+const ForgotPassword: React.FC = () => {
     const [complete, setComplete] = useState(false);
     const [{}, forgotPasswordDev] = useForgotPasswordDevMutation();
 
     return (
-        <Wrapper varient="small">
+        <Layout varient="small">
             <Formik
                 initialValues={{ email: "" }}
                 onSubmit={async (values) => {
@@ -47,7 +45,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({}) => {
                     )
                 }
             </Formik>
-        </Wrapper>
+        </Layout>
     );
 };
 

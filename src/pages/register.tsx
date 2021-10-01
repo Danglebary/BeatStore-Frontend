@@ -10,19 +10,17 @@ import { useRegisterMutation } from "../generated/graphql";
 // Chakra imports
 import { Button } from "@chakra-ui/button";
 // Custom imports
-import Wrapper from "../components/Wrapper";
-import InputField from "../components/InputField";
+import { Layout } from "../components/Layout";
+import { InputField } from "../components/InputField";
 import { toErrorMap } from "../utils/toErrorMap";
 
-interface RegisterProps {}
-
-const Register: React.FC<RegisterProps> = ({}) => {
+const Register: React.FC = () => {
     const router = useRouter();
 
     const [{}, register] = useRegisterMutation();
 
     return (
-        <Wrapper varient="small">
+        <Layout varient="small">
             <Formik
                 initialValues={{ email: "", username: "", password: "" }}
                 onSubmit={async (values, { setErrors }) => {
@@ -58,7 +56,7 @@ const Register: React.FC<RegisterProps> = ({}) => {
                     </Form>
                 )}
             </Formik>
-        </Wrapper>
+        </Layout>
     );
 };
 

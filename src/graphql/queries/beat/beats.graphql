@@ -1,0 +1,13 @@
+query Beats {
+    beats {
+        id
+        title
+        genre
+        bpm
+        key
+        tags
+        creatorId
+        createdAt
+        updatedAt
+    }
+}

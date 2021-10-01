@@ -11,8 +11,8 @@ import { useLoginMutation } from "../generated/graphql";
 // Chakra imports
 import { Button } from "@chakra-ui/button";
 // Custom imports
-import Wrapper from "../components/Wrapper";
-import InputField from "../components/InputField";
+import { Layout } from "../components/Layout";
+import { InputField } from "../components/InputField";
 import { toErrorMap } from "../utils/toErrorMap";
 import { Flex, Link } from "@chakra-ui/layout";
 
@@ -24,7 +24,7 @@ const Login: React.FC<loginProps> = ({}) => {
     const [{}, login] = useLoginMutation();
 
     return (
-        <Wrapper varient="small">
+        <Layout varient="small">
             <Formik
                 initialValues={{ usernameOrEmail: "", password: "" }}
                 onSubmit={async (values, { setErrors }) => {
@@ -32,7 +32,11 @@ const Login: React.FC<loginProps> = ({}) => {
                     if (res.data?.login.errors) {
                         setErrors(toErrorMap(res.data.login.errors));
                     } else if (res.data?.login.user) {
-                        router.push("/");
+                        if (typeof router.query.next === "string") {
+                            router.push(router.query.next);
+                        } else {
+                            router.push("/");
+                        }
                     }
                 }}
             >
@@ -60,7 +64,7 @@ const Login: React.FC<loginProps> = ({}) => {
                     </Form>
                 )}
             </Formik>
-        </Wrapper>
+        </Layout>
     );
 };
 

@@ -1,5 +1,6 @@
 // General imports
 import React from "react";
+import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
 // Urql imports
 import { withUrqlClient } from "next-urql";
@@ -8,11 +9,12 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 // Chakra imports
 import { Button } from "@chakra-ui/react";
 // Custom imports
-import Wrapper from "../components/Wrapper";
-import InputField from "../components/InputField";
-import SelectField from "../components/SelectField";
+import { Layout } from "../components/Layout";
+import { InputField } from "../components/InputField";
+import { SelectField } from "../components/SelectField";
 import { useCreateBeatMutation } from "../generated/graphql";
 import { TagInputField } from "../components/TagInputField";
+import { useIsAuth } from "../utils/useIsAuth";
 
 const allKeys = [
     { option: "C major", value: "c_major" },
@@ -41,11 +43,15 @@ const allKeys = [
     { option: "B minor", value: "b_minor" }
 ];
 
-const CreateBeat: React.FC<{}> = ({}) => {
+const CreateBeat: React.FC = () => {
+    useIsAuth();
+
+    const router = useRouter();
+
     const [{}, uploadBeat] = useCreateBeatMutation();
 
     return (
-        <Wrapper varient="small">
+        <Layout varient="small">
             <Formik
                 initialValues={{
                     title: "",
@@ -56,11 +62,13 @@ const CreateBeat: React.FC<{}> = ({}) => {
                 }}
                 onSubmit={async (values) => {
                     console.log(values);
-                    const result = await uploadBeat({ options: values });
-                    console.log(result);
+                    const { error } = await uploadBeat({ options: values });
+                    if (!error) {
+                        router.push("/");
+                    }
                 }}
             >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, submitForm, setFieldValue }) => (
                     <Form>
                         <InputField
                             name="title"
@@ -79,14 +87,18 @@ const CreateBeat: React.FC<{}> = ({}) => {
                             type="number"
                         />
                         <SelectField name="key" label="key" options={allKeys} />
-                        <TagInputField />
-                        <Button type="submit" isLoading={isSubmitting}>
+                        <TagInputField setFieldValue={setFieldValue} />
+                        <Button
+                            type="button"
+                            onClick={submitForm}
+                            isLoading={isSubmitting}
+                        >
                             upload beat
                         </Button>
                     </Form>
                 )}
             </Formik>
-        </Wrapper>
+        </Layout>
     );
 };
 
