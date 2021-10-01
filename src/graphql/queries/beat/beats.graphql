@@ -1,13 +1,16 @@
 query Beats($limit: Int!, $cursor: String) {
     beats(limit: $limit, cursor: $cursor) {
-        id
-        title
-        genre
-        bpm
-        key
-        tags
-        creatorId
-        createdAt
-        updatedAt
+        hasMore
+        beats {
+            id
+            title
+            genre
+            bpm
+            key
+            tags
+            creatorId
+            createdAt
+            updatedAt
+        }
     }
 }

@@ -121,6 +121,12 @@ export type MutationUpdatePostArgs = {
   title: Scalars['String'];
 };
 
+export type PaginatedBeats = {
+  __typename?: 'PaginatedBeats';
+  beats: Array<Beat>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type Post = {
   __typename?: 'Post';
   createdAt: Scalars['String'];
@@ -132,7 +138,7 @@ export type Post = {
 export type Query = {
   __typename?: 'Query';
   beat?: Maybe<Beat>;
-  beats: Array<Beat>;
+  beats: PaginatedBeats;
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: Array<Post>;
@@ -255,7 +261,7 @@ export type BeatsQueryVariables = Exact<{
 }>;
 
 
-export type BeatsQuery = { __typename?: 'Query', beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, creatorId: number, createdAt: string, updatedAt: string }> };
+export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeats', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, creatorId: number, createdAt: string, updatedAt: string }> } };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -373,15 +379,18 @@ export function useRegisterMutation() {
 export const BeatsDocument = gql`
     query Beats($limit: Int!, $cursor: String) {
   beats(limit: $limit, cursor: $cursor) {
-    id
-    title
-    genre
-    bpm
-    key
-    tags
-    creatorId
-    createdAt
-    updatedAt
+    hasMore
+    beats {
+      id
+      title
+      genre
+      bpm
+      key
+      tags
+      creatorId
+      createdAt
+      updatedAt
+    }
   }
 }
     `;

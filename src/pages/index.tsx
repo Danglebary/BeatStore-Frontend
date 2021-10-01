@@ -1,5 +1,5 @@
 // General imports
-import React from "react";
+import React, { useState } from "react";
 import NextLink from "next/link";
 // Urql imports
 import { withUrqlClient } from "next-urql";
@@ -13,11 +13,20 @@ import { Layout } from "../components/Layout";
 import { Button } from "@chakra-ui/button";
 
 const Index: React.FC<{}> = () => {
-    const [{ data, fetching }] = useBeatsQuery({
-        variables: {
-            limit: 1
-        }
+    const [variables, setVariables] = useState({
+        limit: 1,
+        cursor: null as string | null
     });
+    const [{ data, fetching }] = useBeatsQuery({
+        variables
+    });
+
+    const handleLoadMore = () => {
+        setVariables({
+            limit: variables.limit,
+            cursor: data!.beats.beats[data!.beats.beats.length - 1].createdAt
+        });
+    };
 
     let body = null;
 
@@ -28,7 +37,7 @@ const Index: React.FC<{}> = () => {
     } else {
         body = (
             <Stack spacing={8}>
-                {data!.beats.map(
+                {data!.beats.beats.map(
                     ({ title, id, bpm, key, genre, creatorId }) => (
                         <Box
                             p={5}
@@ -44,7 +53,11 @@ const Index: React.FC<{}> = () => {
                         </Box>
                     )
                 )}
-                {data ? <Button isLoading={fetching}>load more</Button> : null}
+                {data && data.beats.hasMore ? (
+                    <Button onClick={handleLoadMore} isLoading={fetching}>
+                        load more
+                    </Button>
+                ) : null}
             </Stack>
         );
     }
