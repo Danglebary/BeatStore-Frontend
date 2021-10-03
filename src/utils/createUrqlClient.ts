@@ -89,21 +89,14 @@ export const createUrqlClient = (ssrExchange: any) => ({
             },
             updates: {
                 Mutation: {
-                    login: (result, _args, cache, _info) => {
-                        betterUpdateQuery<LoginMutation, MeQuery>(
-                            cache,
-                            { query: MeDocument },
-                            result,
-                            (res, query) => {
-                                if (res.login.errors) {
-                                    return query;
-                                } else {
-                                    return {
-                                        me: res.login.user
-                                    };
-                                }
-                            }
+                    createBeat: (_result, _args, cache, _info) => {
+                        const allFields = cache.inspectFields("Query");
+                        const fieldInfos = allFields.filter(
+                            (info) => info.fieldName === "beats"
                         );
+                        fieldInfos.forEach((fi) => {
+                            cache.invalidate("Query", "beats", fi.arguments);
+                        });
                     },
                     register: (result, _args, cache, _info) => {
                         betterUpdateQuery<RegisterMutation, MeQuery>(
@@ -116,6 +109,22 @@ export const createUrqlClient = (ssrExchange: any) => ({
                                 } else {
                                     return {
                                         me: res.register.user
+                                    };
+                                }
+                            }
+                        );
+                    },
+                    login: (result, _args, cache, _info) => {
+                        betterUpdateQuery<LoginMutation, MeQuery>(
+                            cache,
+                            { query: MeDocument },
+                            result,
+                            (res, query) => {
+                                if (res.login.errors) {
+                                    return query;
+                                } else {
+                                    return {
+                                        me: res.login.user
                                     };
                                 }
                             }
