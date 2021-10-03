@@ -1,0 +1,5 @@
+query Beat($id: Int!) {
+    beat(id: $id) {
+        ...BeatFull
+    }
+}
