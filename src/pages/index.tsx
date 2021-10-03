@@ -14,7 +14,7 @@ import { BeatCardMain } from "../components/BeatCardMain";
 
 const Index: React.FC<{}> = () => {
     const [variables, setVariables] = useState({
-        limit: 2,
+        limit: 10,
         cursor: null as string | null
     });
     const [{ data, fetching }] = useBeatsQuery({
