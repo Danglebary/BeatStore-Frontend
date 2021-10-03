@@ -1,4 +1,4 @@
-query Beats($limit: Int!, $cursor: String) {
+query Beats($limit: Int, $cursor: String) {
     beats(limit: $limit, cursor: $cursor) {
         hasMore
         beats {
