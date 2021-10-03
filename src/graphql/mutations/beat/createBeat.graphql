@@ -1,11 +1,17 @@
 mutation CreateBeat($options: CreateBeatInput!) {
     createBeat(options: $options) {
-        id
-        title
-        bpm
-        key
-        genre
-        createdAt
-        updatedAt
+        errors {
+            field
+            message
+        }
+        beat {
+            id
+            title
+            bpm
+            key
+            genre
+            createdAt
+            updatedAt
+        }
     }
 }
