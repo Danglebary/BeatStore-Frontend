@@ -6,9 +6,12 @@ import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 // Chakra imports
 import { Box, Flex } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
+import { isServer } from "../utils/isServer";
 
 export const NavBar: React.FC = () => {
-    const [{ data, fetching: meFetching }] = useMeQuery();
+    const [{ data, fetching: meFetching }] = useMeQuery({
+        pause: isServer()
+    });
 
     const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
