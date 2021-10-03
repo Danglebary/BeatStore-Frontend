@@ -2,7 +2,7 @@
 import React from "react";
 import NextLink from "next/link";
 // GraphQL type imports
-import { BeatSimpleFragment } from "../generated/graphql";
+import { BeatSimpleFragment, useLikeBeatMutation } from "../generated/graphql";
 // Chakra imports
 import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import { Tooltip } from "@chakra-ui/tooltip";
@@ -10,7 +10,7 @@ import { IconButton } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 // React Icon imports
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { HiOutlineHeart } from "react-icons/hi";
+import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 // Custom imports
 import { BeatModal } from "./BeatModal";
 
@@ -20,6 +20,10 @@ interface BeatCardMainProps {
 
 export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [{}, likeBeat] = useLikeBeatMutation();
+
+    // console.log(`like status for beat ${beat.title} = ${beat.likeStatus}`);
 
     return (
         <>
@@ -45,12 +49,30 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                             <Link>{beat.creator.userName}</Link>
                         </NextLink>
                     </Text>
-                    <Tooltip label="like this beat?">
+                    <Tooltip
+                        label={
+                            beat.likeStatus
+                                ? "unlike this beat"
+                                : "like this beat"
+                        }
+                    >
                         <span style={{ marginLeft: "auto" }}>
                             <IconButton
                                 fontSize="x-large"
-                                aria-label="like this beat"
-                                icon={<HiOutlineHeart />}
+                                aria-label={
+                                    beat.likeStatus
+                                        ? "unlike this beat"
+                                        : "like this beat"
+                                }
+                                icon={
+                                    beat.likeStatus ? (
+                                        <HiHeart />
+                                    ) : (
+                                        <HiOutlineHeart />
+                                    )
+                                }
+                                colorScheme={beat.likeStatus ? "red" : "gray"}
+                                onClick={() => likeBeat({ beatId: beat.id })}
                             />
                         </span>
                     </Tooltip>
