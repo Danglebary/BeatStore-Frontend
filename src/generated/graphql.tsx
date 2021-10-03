@@ -230,6 +230,10 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } };
+
+export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> };
+
 export type ErrorSimpleFragment = { __typename?: 'FieldError', field: string, message: string };
 
 export type UserResponseSimpleFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> };
@@ -290,7 +294,7 @@ export type BeatsQueryVariables = Exact<{
 }>;
 
 
-export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> } };
+export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> } };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -302,6 +306,31 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: number, userName: string }> };
 
+export const BeatSimpleFragmentDoc = gql`
+    fragment BeatSimple on Beat {
+  id
+  title
+  genre
+  bpm
+  key
+  tags
+  likesCount
+  creator {
+    id
+    userName
+  }
+  createdAt
+  updatedAt
+}
+    `;
+export const BeatsResponseSimpleFragmentDoc = gql`
+    fragment BeatsResponseSimple on PaginatedBeatsResponse {
+  hasMore
+  beats {
+    ...BeatSimple
+  }
+}
+    ${BeatSimpleFragmentDoc}`;
 export const ErrorSimpleFragmentDoc = gql`
     fragment ErrorSimple on FieldError {
   field
@@ -414,24 +443,10 @@ export function useRegisterMutation() {
 export const BeatsDocument = gql`
     query Beats($limit: Int, $cursor: String) {
   beats(limit: $limit, cursor: $cursor) {
-    hasMore
-    beats {
-      id
-      title
-      genre
-      bpm
-      key
-      tags
-      creator {
-        id
-        userName
-      }
-      createdAt
-      updatedAt
-    }
+    ...BeatsResponseSimple
   }
 }
-    `;
+    ${BeatsResponseSimpleFragmentDoc}`;
 
 export function useBeatsQuery(options: Omit<Urql.UseQueryArgs<BeatsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<BeatsQuery>({ query: BeatsDocument, ...options });

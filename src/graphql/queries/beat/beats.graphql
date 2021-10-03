@@ -1,19 +1,5 @@
 query Beats($limit: Int, $cursor: String) {
     beats(limit: $limit, cursor: $cursor) {
-        hasMore
-        beats {
-            id
-            title
-            genre
-            bpm
-            key
-            tags
-            creator {
-                id
-                userName
-            }
-            createdAt
-            updatedAt
-        }
+        ...BeatsResponseSimple
     }
 }

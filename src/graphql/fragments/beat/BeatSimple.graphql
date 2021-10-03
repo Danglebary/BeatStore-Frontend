@@ -1,0 +1,15 @@
+fragment BeatSimple on Beat {
+    id
+    title
+    genre
+    bpm
+    key
+    tags
+    likesCount
+    creator {
+        id
+        userName
+    }
+    createdAt
+    updatedAt
+}

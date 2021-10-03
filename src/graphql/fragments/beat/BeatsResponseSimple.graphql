@@ -1,0 +1,6 @@
+fragment BeatsResponseSimple on PaginatedBeatsResponse {
+    hasMore
+    beats {
+        ...BeatSimple
+    }
+}
