@@ -1,3 +1,5 @@
+// General imports
+import Router from "next/router";
 // Urql imports
 import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
 import {
@@ -6,16 +8,20 @@ import {
     fetchExchange,
     stringifyVariables
 } from "urql";
+import { pipe, tap } from "wonka";
+import gql from "graphql-tag";
+// GraphQL imports
 import {
     LoginMutation,
     MeQuery,
     MeDocument,
     RegisterMutation,
-    LogoutMutation
+    LogoutMutation,
+    LikeBeatMutationVariables
 } from "../generated/graphql";
+// Custom imports
 import { betterUpdateQuery } from "./betterUpdateQuery";
-import { pipe, tap } from "wonka";
-import Router from "next/router";
+import { isServer } from "./isServer";
 
 const errorExchange: Exchange =
     ({ forward }) =>
@@ -71,78 +77,129 @@ const cursorPagination = (): Resolver => {
     };
 };
 
-export const createUrqlClient = (ssrExchange: any) => ({
-    url: "http://localhost:1337/graphql",
-    fetchOptions: {
-        credentials: "include" as const
-    },
-    exchanges: [
-        dedupExchange,
-        cacheExchange({
-            keys: {
-                PaginatedBeats: () => null
-            },
-            resolvers: {
-                Query: {
-                    beats: cursorPagination()
-                }
-            },
-            updates: {
-                Mutation: {
-                    createBeat: (_result, _args, cache, _info) => {
-                        const allFields = cache.inspectFields("Query");
-                        const fieldInfos = allFields.filter(
-                            (info) => info.fieldName === "beats"
-                        );
-                        fieldInfos.forEach((fi) => {
-                            cache.invalidate("Query", "beats", fi.arguments);
-                        });
-                    },
-                    register: (result, _args, cache, _info) => {
-                        betterUpdateQuery<RegisterMutation, MeQuery>(
-                            cache,
-                            { query: MeDocument },
-                            result,
-                            (res, query) => {
-                                if (res.register.errors) {
-                                    return query;
-                                } else {
-                                    return {
-                                        me: res.register.user
-                                    };
-                                }
+export const createUrqlClient = (ssrExchange: any, ctx: any) => {
+    let cookie = "";
+    if (isServer()) {
+        cookie = ctx.req.headers.cookie;
+    }
+
+    return {
+        url: "http://localhost:1337/graphql",
+        fetchOptions: {
+            credentials: "include" as const,
+            headers: cookie
+                ? {
+                      cookie
+                  }
+                : undefined
+        },
+        exchanges: [
+            dedupExchange,
+            cacheExchange({
+                keys: {
+                    PaginatedBeatsResponse: () => null
+                },
+                resolvers: {
+                    Query: {
+                        beats: cursorPagination()
+                    }
+                },
+                updates: {
+                    Mutation: {
+                        likeBeat: (_result, args, cache, _info) => {
+                            const { beatId } =
+                                args as LikeBeatMutationVariables;
+                            const data = cache.readFragment(
+                                gql`
+                                    fragment _ on Beat {
+                                        id
+                                        likesCount
+                                        likeStatus
+                                    }
+                                `,
+                                { id: beatId } as any
+                            );
+                            if (data) {
+                                const newLikesCount = data.likeStatus
+                                    ? data.likesCount + 1
+                                    : data.likesCount - 1;
+                                const newLikeStatus = !data.likeStatus;
+                                cache.writeFragment(
+                                    gql`
+                                        fragment __ on Beat {
+                                            likesCount
+                                            likeStatus
+                                        }
+                                    `,
+                                    {
+                                        id: beatId,
+                                        likesCount: newLikesCount,
+                                        likeStatus: newLikeStatus
+                                    }
+                                );
                             }
-                        );
-                    },
-                    login: (result, _args, cache, _info) => {
-                        betterUpdateQuery<LoginMutation, MeQuery>(
-                            cache,
-                            { query: MeDocument },
-                            result,
-                            (res, query) => {
-                                if (res.login.errors) {
-                                    return query;
-                                } else {
-                                    return {
-                                        me: res.login.user
-                                    };
+                        },
+                        createBeat: (_result, _args, cache, _info) => {
+                            const key = "Query";
+                            const fieldToInvalidate = "beats";
+                            const allFields = cache.inspectFields(key);
+                            const fieldInfos = allFields.filter(
+                                (info) => info.fieldName === fieldToInvalidate
+                            );
+                            fieldInfos.forEach((fi) => {
+                                cache.invalidate(
+                                    key,
+                                    fieldToInvalidate,
+                                    fi.arguments
+                                );
+                            });
+                        },
+                        register: (result, _args, cache, _info) => {
+                            betterUpdateQuery<RegisterMutation, MeQuery>(
+                                cache,
+                                { query: MeDocument },
+                                result,
+                                (res, query) => {
+                                    if (res.register.errors) {
+                                        return query;
+                                    } else {
+                                        return {
+                                            me: res.register.user
+                                        };
+                                    }
                                 }
-                            }
-                        );
-                    },
-                    logout: (result, _args, cache, _info) => {
-                        betterUpdateQuery<LogoutMutation, MeQuery>(
-                            cache,
-                            { query: MeDocument },
-                            result,
-                            () => ({ me: null })
-                        );
+                            );
+                        },
+                        login: (result, _args, cache, _info) => {
+                            betterUpdateQuery<LoginMutation, MeQuery>(
+                                cache,
+                                { query: MeDocument },
+                                result,
+                                (res, query) => {
+                                    if (res.login.errors) {
+                                        return query;
+                                    } else {
+                                        return {
+                                            me: res.login.user
+                                        };
+                                    }
+                                }
+                            );
+                        },
+                        logout: (result, _args, cache, _info) => {
+                            betterUpdateQuery<LogoutMutation, MeQuery>(
+                                cache,
+                                { query: MeDocument },
+                                result,
+                                () => ({ me: null })
+                            );
+                        }
                     }
                 }
-            }
-        }),
-        errorExchange,
-        ssrExchange,
-        fetchExchange
-    ]
-});
+            }),
+            errorExchange,
+            ssrExchange,
+            fetchExchange
+        ]
+    };
+};
