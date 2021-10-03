@@ -25,7 +25,7 @@ export type Beat = {
   key?: Maybe<Scalars['String']>;
   likes: Array<Like>;
   likesCount: Scalars['Int'];
-  tags?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Scalars['String']>>;
   title: Scalars['String'];
   updatedAt: Scalars['String'];
   url?: Maybe<Scalars['String']>;
@@ -290,7 +290,7 @@ export type BeatsQueryVariables = Exact<{
 }>;
 
 
-export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> } };
+export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> } };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
