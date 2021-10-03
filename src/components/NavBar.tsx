@@ -25,13 +25,13 @@ export const NavBar: React.FC = () => {
         body = (
             <>
                 <NextLink href="/">
-                    <Link>home</Link>
+                    <Button variant="link">home</Button>
                 </NextLink>
                 <NextLink href="/login">
-                    <Link>login</Link>
+                    <Button variant="link">login</Button>
                 </NextLink>
                 <NextLink href="/register">
-                    <Link>register</Link>
+                    <Button variant="link">register</Button>
                 </NextLink>
             </>
         );
@@ -41,7 +41,10 @@ export const NavBar: React.FC = () => {
             <>
                 <Box>{data.me.userName}</Box>
                 <NextLink href="/">
-                    <Link>home</Link>
+                    <Button variant="link">home</Button>
+                </NextLink>
+                <NextLink href="/create-beat">
+                    <Button variant="link">create beat</Button>
                 </NextLink>
                 <Button
                     variant="link"
@@ -57,13 +60,12 @@ export const NavBar: React.FC = () => {
     }
 
     return (
-        <Flex bg="tomato" p={4}>
+        <Flex bg="purple.800" p={4}>
             <Flex
                 justifyContent="center"
                 justifyItems="center"
                 gridGap="1em"
                 ml="auto"
-                color="white"
             >
                 {body}
             </Flex>
