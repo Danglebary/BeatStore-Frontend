@@ -1,6 +1,8 @@
 // General imports
 import React from "react";
 import NextLink from "next/link";
+// GraphQL type imports
+import { BeatSimpleFragment } from "../generated/graphql";
 // Chakra imports
 import {
     Modal,
@@ -13,9 +15,9 @@ import {
 import { Box, Grid, Link, Text } from "@chakra-ui/layout";
 
 interface BeatModalProps {
-    beat: any;
-    isOpen: any;
-    onClose: any;
+    beat: BeatSimpleFragment;
+    isOpen: boolean;
+    onClose: () => void;
 }
 
 export const BeatModal: React.FC<BeatModalProps> = ({
