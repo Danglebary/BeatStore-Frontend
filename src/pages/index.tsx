@@ -1,20 +1,20 @@
 // General imports
 import React, { useState } from "react";
-import NextLink from "next/link";
 // Urql imports
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 // GraphQL imports
 import { useBeatsQuery } from "../generated/graphql";
 // Chakra imports
-import { Box, Flex, Heading, Link, Stack } from "@chakra-ui/layout";
+import { Heading, Stack } from "@chakra-ui/layout";
 // Custom imports
 import { Layout } from "../components/Layout";
 import { Button } from "@chakra-ui/button";
+import { BeatCardMain } from "../components/BeatCardMain";
 
 const Index: React.FC<{}> = () => {
     const [variables, setVariables] = useState({
-        limit: 1,
+        limit: 2,
         cursor: null as string | null
     });
     const [{ data, fetching }] = useBeatsQuery({
@@ -37,22 +37,9 @@ const Index: React.FC<{}> = () => {
     } else {
         body = (
             <Stack spacing={8}>
-                {data!.beats.beats.map(
-                    ({ title, id, bpm, key, genre, creatorId }) => (
-                        <Box
-                            p={5}
-                            shadow="md"
-                            borderWidth="1px"
-                            key={title + id}
-                        >
-                            <Heading fontSize="lg">{title}</Heading>
-                            <p>{bpm}</p>
-                            <p>{key}</p>
-                            <p>{genre}</p>
-                            <p>{creatorId}</p>
-                        </Box>
-                    )
-                )}
+                {data!.beats.beats.map((beat) => (
+                    <BeatCardMain beat={beat} key={beat.title + beat.id} />
+                ))}
                 {data && data.beats.hasMore ? (
                     <Button onClick={handleLoadMore} isLoading={fetching}>
                         load more
@@ -64,12 +51,7 @@ const Index: React.FC<{}> = () => {
 
     return (
         <Layout varient="regular">
-            <Flex align="flex-end">
-                <Heading>beatStore</Heading>
-                <NextLink href="/create-beat">
-                    <Link ml="auto">create beat</Link>
-                </NextLink>
-            </Flex>
+            <Heading>New Beats</Heading>
             <br />
             {body}
         </Layout>
