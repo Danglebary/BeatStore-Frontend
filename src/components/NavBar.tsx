@@ -5,20 +5,16 @@ import NextLink from "next/link";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 // Chakra imports
 import { Box, Flex } from "@chakra-ui/layout";
-import { Button, Link } from "@chakra-ui/react";
-// Custom imports
-import { isServer } from "../utils/isServer";
+import { Button } from "@chakra-ui/react";
 
 export const NavBar: React.FC = () => {
-    const [{ data, fetching: meQueryFetching }] = useMeQuery({
-        pause: isServer()
-    });
+    const [{ data, fetching: meFetching }] = useMeQuery();
 
     const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
     let body = null;
 
-    if (meQueryFetching) {
+    if (meFetching) {
         // data is loading
     } else if (!data?.me) {
         // user not logged in
