@@ -230,11 +230,11 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type ErrorSimpleFragment = { __typename?: 'FieldError', field: string, message: string };
+
 export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } };
 
 export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> };
-
-export type ErrorSimpleFragment = { __typename?: 'FieldError', field: string, message: string };
 
 export type UserResponseSimpleFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> };
 
@@ -246,6 +246,13 @@ export type CreateBeatMutationVariables = Exact<{
 
 
 export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'BeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, bpm?: Maybe<number>, key?: Maybe<string>, genre?: Maybe<string>, createdAt: string, updatedAt: string }> } };
+
+export type LikeBeatMutationVariables = Exact<{
+  beatId: Scalars['Int'];
+}>;
+
+
+export type LikeBeatMutation = { __typename?: 'Mutation', likeBeat: { __typename?: 'ErrorsOrValidResponse', valid?: Maybe<boolean>, error?: Maybe<{ __typename?: 'FieldError', field: string, message: string }> } };
 
 export type CreatePostMutationVariables = Exact<{
   title: Scalars['String'];
@@ -376,6 +383,20 @@ export const CreateBeatDocument = gql`
 
 export function useCreateBeatMutation() {
   return Urql.useMutation<CreateBeatMutation, CreateBeatMutationVariables>(CreateBeatDocument);
+};
+export const LikeBeatDocument = gql`
+    mutation likeBeat($beatId: Int!) {
+  likeBeat(beatId: $beatId) {
+    error {
+      ...ErrorSimple
+    }
+    valid
+  }
+}
+    ${ErrorSimpleFragmentDoc}`;
+
+export function useLikeBeatMutation() {
+  return Urql.useMutation<LikeBeatMutation, LikeBeatMutationVariables>(LikeBeatDocument);
 };
 export const CreatePostDocument = gql`
     mutation CreatePost($title: String!) {

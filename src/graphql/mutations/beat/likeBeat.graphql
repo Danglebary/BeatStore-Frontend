@@ -1,0 +1,8 @@
+mutation likeBeat($beatId: Int!) {
+    likeBeat(beatId: $beatId) {
+        error {
+            ...ErrorSimple
+        }
+        valid
+    }
+}
