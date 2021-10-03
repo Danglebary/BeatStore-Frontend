@@ -1,5 +1,6 @@
 // General imports
 import React from "react";
+import { ColorModeToggle } from "./ColorModeToggle";
 import { NavBar } from "./NavBar";
 // Custom imports
 import { Wrapper, WrapperVarient } from "./Wrapper";
@@ -13,6 +14,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, varient }) => {
         <>
             <NavBar />
             <Wrapper varient={varient}>{children}</Wrapper>
+            <ColorModeToggle />
         </>
     );
 };
