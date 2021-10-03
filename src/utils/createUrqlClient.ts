@@ -60,7 +60,6 @@ const cursorPagination = (): Resolver => {
             if (!_hasMore) {
                 hasMore = false;
             }
-            console.log(data);
             results.push(...data);
         });
 
