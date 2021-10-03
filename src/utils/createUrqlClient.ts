@@ -64,7 +64,7 @@ const cursorPagination = (): Resolver => {
         });
 
         return {
-            __typename: "PaginatedBeats",
+            __typename: "PaginatedBeatsResponse",
             hasMore,
             beats: results
         };
