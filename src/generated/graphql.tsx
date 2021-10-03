@@ -254,13 +254,6 @@ export type LikeBeatMutationVariables = Exact<{
 
 export type LikeBeatMutation = { __typename?: 'Mutation', likeBeat: { __typename?: 'ErrorsOrValidResponse', valid?: Maybe<boolean>, error?: Maybe<{ __typename?: 'FieldError', field: string, message: string }> } };
 
-export type CreatePostMutationVariables = Exact<{
-  title: Scalars['String'];
-}>;
-
-
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string } };
-
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
   newPassword: Scalars['String'];
@@ -295,6 +288,13 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> } };
 
+export type BeatQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type BeatQuery = { __typename?: 'Query', beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> };
+
 export type BeatsQueryVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
   cursor?: Maybe<Scalars['String']>;
@@ -302,11 +302,6 @@ export type BeatsQueryVariables = Exact<{
 
 
 export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> } };
-
-export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: number, title: string }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -399,18 +394,6 @@ export const LikeBeatDocument = gql`
 export function useLikeBeatMutation() {
   return Urql.useMutation<LikeBeatMutation, LikeBeatMutationVariables>(LikeBeatDocument);
 };
-export const CreatePostDocument = gql`
-    mutation CreatePost($title: String!) {
-  createPost(title: $title) {
-    id
-    title
-  }
-}
-    `;
-
-export function useCreatePostMutation() {
-  return Urql.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument);
-};
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
@@ -462,6 +445,17 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const BeatDocument = gql`
+    query Beat($id: Int!) {
+  beat(id: $id) {
+    ...BeatSimple
+  }
+}
+    ${BeatSimpleFragmentDoc}`;
+
+export function useBeatQuery(options: Omit<Urql.UseQueryArgs<BeatQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<BeatQuery>({ query: BeatDocument, ...options });
+};
 export const BeatsDocument = gql`
     query Beats($limit: Int, $cursor: String) {
   beats(limit: $limit, cursor: $cursor) {
@@ -472,18 +466,6 @@ export const BeatsDocument = gql`
 
 export function useBeatsQuery(options: Omit<Urql.UseQueryArgs<BeatsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<BeatsQuery>({ query: BeatsDocument, ...options });
-};
-export const PostsDocument = gql`
-    query Posts {
-  posts {
-    id
-    title
-  }
-}
-    `;
-
-export function usePostsQuery(options: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {

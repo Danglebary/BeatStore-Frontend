@@ -1,0 +1,16 @@
+fragment BeatFull on Beat {
+    id
+    title
+    genre
+    bpm
+    key
+    tags
+    likesCount
+    likeStatus
+    creator {
+        id
+        userName
+    }
+    createdAt
+    updatedAt
+}
