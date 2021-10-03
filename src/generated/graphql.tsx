@@ -290,7 +290,7 @@ export type BeatsQueryVariables = Exact<{
 }>;
 
 
-export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, creatorId: number, createdAt: string, updatedAt: string }> } };
+export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> } };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -422,7 +422,10 @@ export const BeatsDocument = gql`
       bpm
       key
       tags
-      creatorId
+      creator {
+        id
+        userName
+      }
       createdAt
       updatedAt
     }

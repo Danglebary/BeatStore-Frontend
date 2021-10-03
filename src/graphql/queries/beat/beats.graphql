@@ -8,7 +8,10 @@ query Beats($limit: Int!, $cursor: String) {
             bpm
             key
             tags
-            creatorId
+            creator {
+                id
+                userName
+            }
             createdAt
             updatedAt
         }
