@@ -6,6 +6,7 @@ import { useMeQuery, useLogoutMutation } from "../../generated/graphql";
 // Chakra imports
 import { Flex, Heading } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
+// Custom imports
 import { isServer } from "../../utils/isServer";
 
 export const NavBar: React.FC = () => {
