@@ -19,6 +19,7 @@ import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { BeatModal } from "../Modals/BeatModal";
 import AlertMain from "../Alerts/AlertMain";
 import { AlertOptions } from "../../types/alertTypes";
+import { isServer } from "../../utils/isServer";
 
 interface BeatCardMainProps {
     beat: BeatSimpleFragment;
@@ -26,7 +27,9 @@ interface BeatCardMainProps {
 
 export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
     // me query info
-    const [{ data: meData }] = useMeQuery();
+    const [{ data: meData }] = useMeQuery({
+        pause: isServer()
+    });
     // show like button state
     // more info modal
     const { isOpen, onOpen, onClose } = useDisclosure();
