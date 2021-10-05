@@ -11,4 +11,5 @@ fragment BeatSimple on Beat {
         id
         username
     }
+    createdAt
 }
