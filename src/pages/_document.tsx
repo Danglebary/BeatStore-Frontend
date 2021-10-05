@@ -7,7 +7,7 @@ export default class Document extends NextDocument {
         return (
             <Html>
                 <Head />
-                <body>
+                <body style={{ overscrollBehavior: "none" }}>
                     <ColorModeScript
                         initialColorMode={theme.config.initialColorMode}
                     />
