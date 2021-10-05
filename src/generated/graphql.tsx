@@ -141,7 +141,8 @@ export type Query = {
   beat?: Maybe<Beat>;
   beats: PaginatedBeatsResponse;
   me?: Maybe<User>;
-  user?: Maybe<User>;
+  userById?: Maybe<User>;
+  userByUsername?: Maybe<User>;
   users: Array<User>;
 };
 
@@ -157,8 +158,13 @@ export type QueryBeatsArgs = {
 };
 
 
-export type QueryUserArgs = {
+export type QueryUserByIdArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryUserByUsernameArgs = {
+  username: Scalars['String'];
 };
 
 export type RegisterUserInput = {
@@ -204,6 +210,8 @@ export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: strin
 
 export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, creator: { __typename?: 'User', id: number, username: string } }> };
 
+export type UserFullFragment = { __typename?: 'User', id: number, username: string, email: string, location: string, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, creator: { __typename?: 'User', id: number, username: string } }> };
+
 export type UserResponseSimpleFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> };
 
 export type UserSimpleFragment = { __typename?: 'User', id: number, username: string };
@@ -214,6 +222,13 @@ export type CreateBeatMutationVariables = Exact<{
 
 
 export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, bpm?: Maybe<number>, key?: Maybe<string>, genre?: Maybe<string>, createdAt: string, updatedAt: string }> } };
+
+export type DeleteBeatMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteBeatMutation = { __typename?: 'Mutation', deleteBeat: boolean };
 
 export type LikeBeatMutationVariables = Exact<{
   beatId: Scalars['Int'];
@@ -276,6 +291,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: number, username: string }> };
 
+export type UserByUsernameQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UserByUsernameQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', id: number, username: string, email: string, location: string, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, creator: { __typename?: 'User', id: number, username: string } }> }> };
+
 export const BeatFullFragmentDoc = gql`
     fragment BeatFull on Beat {
   id
@@ -313,6 +335,17 @@ export const BeatSimpleFragmentDoc = gql`
 export const BeatsResponseSimpleFragmentDoc = gql`
     fragment BeatsResponseSimple on PaginatedBeatsResponse {
   hasMore
+  beats {
+    ...BeatSimple
+  }
+}
+    ${BeatSimpleFragmentDoc}`;
+export const UserFullFragmentDoc = gql`
+    fragment UserFull on User {
+  id
+  username
+  email
+  location
   beats {
     ...BeatSimple
   }
@@ -363,6 +396,15 @@ export const CreateBeatDocument = gql`
 
 export function useCreateBeatMutation() {
   return Urql.useMutation<CreateBeatMutation, CreateBeatMutationVariables>(CreateBeatDocument);
+};
+export const DeleteBeatDocument = gql`
+    mutation DeleteBeat($id: Int!) {
+  deleteBeat(id: $id)
+}
+    `;
+
+export function useDeleteBeatMutation() {
+  return Urql.useMutation<DeleteBeatMutation, DeleteBeatMutationVariables>(DeleteBeatDocument);
 };
 export const LikeBeatDocument = gql`
     mutation likeBeat($beatId: Int!) {
@@ -461,4 +503,15 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const UserByUsernameDocument = gql`
+    query UserByUsername($username: String!) {
+  userByUsername(username: $username) {
+    ...UserFull
+  }
+}
+    ${UserFullFragmentDoc}`;
+
+export function useUserByUsernameQuery(options: Omit<Urql.UseQueryArgs<UserByUsernameQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UserByUsernameQuery>({ query: UserByUsernameDocument, ...options });
 };

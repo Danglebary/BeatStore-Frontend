@@ -1,0 +1,3 @@
+mutation DeleteBeat($id: Int!) {
+    deleteBeat(id: $id)
+}
