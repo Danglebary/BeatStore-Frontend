@@ -4,7 +4,8 @@ import NextLink from "next/link";
 // GraphQL type imports
 import {
     BeatSimpleFragment,
-    useLikeBeatMutation
+    useLikeBeatMutation,
+    useMeQuery
 } from "../../generated/graphql";
 // Chakra imports
 import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
@@ -24,6 +25,9 @@ interface BeatCardMainProps {
 }
 
 export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
+    // me query info
+    const [{ data: meData }] = useMeQuery();
+    // show like button state
     // more info modal
     const { isOpen, onOpen, onClose } = useDisclosure();
     // like beat error state
@@ -75,36 +79,40 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                     <Text>
                         Prod.{" "}
                         <NextLink href={`/users/${beat.creator.id}`}>
-                            <Link>{beat.creator.userName}</Link>
+                            <Link>{beat.creator.username}</Link>
                         </NextLink>
                     </Text>
-                    <Tooltip
-                        label={
-                            beat.likeStatus
-                                ? "unlike this beat"
-                                : "like this beat"
-                        }
-                    >
-                        <span style={{ marginLeft: "auto" }}>
-                            <IconButton
-                                fontSize="x-large"
-                                aria-label={
-                                    beat.likeStatus
-                                        ? "unlike this beat"
-                                        : "like this beat"
-                                }
-                                icon={
-                                    beat.likeStatus ? (
-                                        <HiHeart />
-                                    ) : (
-                                        <HiOutlineHeart />
-                                    )
-                                }
-                                colorScheme={beat.likeStatus ? "red" : "gray"}
-                                onClick={handleLikeBeat}
-                            />
-                        </span>
-                    </Tooltip>
+                    {meData?.me?.id === beat.creator.id ? null : (
+                        <Tooltip
+                            label={
+                                beat.likeStatus
+                                    ? "unlike this beat"
+                                    : "like this beat"
+                            }
+                        >
+                            <span style={{ marginLeft: "auto" }}>
+                                <IconButton
+                                    fontSize="x-large"
+                                    aria-label={
+                                        beat.likeStatus
+                                            ? "unlike this beat"
+                                            : "like this beat"
+                                    }
+                                    icon={
+                                        beat.likeStatus ? (
+                                            <HiHeart />
+                                        ) : (
+                                            <HiOutlineHeart />
+                                        )
+                                    }
+                                    colorScheme={
+                                        beat.likeStatus ? "red" : "gray"
+                                    }
+                                    onClick={handleLikeBeat}
+                                />
+                            </span>
+                        </Tooltip>
+                    )}
                 </Flex>
             </Box>
         </>
