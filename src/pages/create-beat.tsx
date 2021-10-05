@@ -9,11 +9,11 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 // Chakra imports
 import { Button } from "@chakra-ui/react";
 // Custom imports
-import { Layout } from "../components/Layout";
-import { InputField } from "../components/InputField";
-import { SelectField } from "../components/SelectField";
+import { Layout } from "../components/Wrappers/Layout";
+import { InputField } from "../components/InputFields/InputField";
+import { SelectField } from "../components/InputFields/SelectField";
 import { useCreateBeatMutation } from "../generated/graphql";
-import { TagInputField } from "../components/TagInputField";
+import { TagInputField } from "../components/InputFields/TagInputField";
 import { useIsAuth } from "../utils/useIsAuth";
 
 const allKeys = [

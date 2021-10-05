@@ -1,7 +1,7 @@
 // General imports
 import React from "react";
-import { ColorModeToggle } from "./ColorModeToggle";
-import { NavBar } from "./NavBar";
+import { ColorModeToggle } from "../Misc/ColorModeToggle";
+import { NavBar } from "../Nav/NavBar";
 // Custom imports
 import { Wrapper, WrapperVarient } from "./Wrapper";
 

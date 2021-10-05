@@ -2,7 +2,7 @@
 import React from "react";
 import NextLink from "next/link";
 // GraphQL type imports
-import { BeatSimpleFragment } from "../generated/graphql";
+import { BeatSimpleFragment } from "../../generated/graphql";
 // Chakra imports
 import {
     Modal,

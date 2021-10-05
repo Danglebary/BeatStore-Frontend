@@ -8,9 +8,9 @@ import { useBeatsQuery } from "../generated/graphql";
 // Chakra imports
 import { Heading, Stack } from "@chakra-ui/layout";
 // Custom imports
-import { Layout } from "../components/Layout";
+import { Layout } from "../components/Wrappers/Layout";
 import { Button } from "@chakra-ui/button";
-import { BeatCardMain } from "../components/BeatCardMain";
+import { BeatCardMain } from "../components/Cards/BeatCardMain";
 
 const Index: React.FC<{}> = () => {
     const [variables, setVariables] = useState({

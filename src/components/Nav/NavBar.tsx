@@ -2,11 +2,11 @@
 import React from "react";
 import NextLink from "next/link";
 // GraphQL imports
-import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import { useMeQuery, useLogoutMutation } from "../../generated/graphql";
 // Chakra imports
 import { Box, Flex } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
-import { isServer } from "../utils/isServer";
+import { isServer } from "../../utils/isServer";
 
 export const NavBar: React.FC = () => {
     const [{ data, fetching: meFetching }] = useMeQuery({

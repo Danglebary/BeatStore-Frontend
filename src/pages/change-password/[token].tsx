@@ -12,8 +12,8 @@ import { useChangePasswordMutation } from "../../generated/graphql";
 import { Button } from "@chakra-ui/react";
 import { Box, Flex, Link } from "@chakra-ui/layout";
 // Custom imports
-import { Layout } from "../../components/Layout";
-import { InputField } from "../../components/InputField";
+import { Layout } from "../../components/Wrappers/Layout";
+import { InputField } from "../../components/InputFields/InputField";
 import { toErrorMap } from "../../utils/toErrorMap";
 
 const ChangePassword: React.FC = () => {

@@ -9,8 +9,8 @@ import { useForgotPasswordDevMutation } from "../generated/graphql";
 // Chakra imports
 import { Button, Box } from "@chakra-ui/react";
 // Custom imports
-import { Layout } from "../components/Layout";
-import { InputField } from "../components/InputField";
+import { Layout } from "../components/Wrappers/Layout";
+import { InputField } from "../components/InputFields/InputField";
 
 const ForgotPassword: React.FC = () => {
     const [complete, setComplete] = useState(false);

@@ -11,8 +11,8 @@ import { useLoginMutation } from "../generated/graphql";
 // Chakra imports
 import { Button } from "@chakra-ui/button";
 // Custom imports
-import { Layout } from "../components/Layout";
-import { InputField } from "../components/InputField";
+import { Layout } from "../components/Wrappers/Layout";
+import { InputField } from "../components/InputFields/InputField";
 import { toErrorMap } from "../utils/toErrorMap";
 import { Flex, Link } from "@chakra-ui/layout";
 
