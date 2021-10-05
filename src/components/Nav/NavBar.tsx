@@ -36,14 +36,14 @@ export const NavBar: React.FC = () => {
         // user logged in
         body = (
             <>
+                <NextLink href="/create-beat">
+                    <Button variant="link">create beat</Button>
+                </NextLink>
                 <NextLink
                     href="/user/[username]"
                     as={`/user/${data.me.username}`}
                 >
                     <Button variant="link">{data.me.username}</Button>
-                </NextLink>
-                <NextLink href="/create-beat">
-                    <Button variant="link">create beat</Button>
                 </NextLink>
                 <Button
                     variant="link"
