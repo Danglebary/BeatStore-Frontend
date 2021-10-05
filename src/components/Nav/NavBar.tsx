@@ -4,7 +4,7 @@ import NextLink from "next/link";
 // GraphQL imports
 import { useMeQuery, useLogoutMutation } from "../../generated/graphql";
 // Chakra imports
-import { Box, Flex, Heading } from "@chakra-ui/layout";
+import { Flex, Heading } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { isServer } from "../../utils/isServer";
 
@@ -37,9 +37,10 @@ export const NavBar: React.FC = () => {
             <>
                 <NextLink
                     href="/user/[username]"
-                    as={`/user/${data.me.id}`}
-                ></NextLink>
-                <Box alignSelf="center">{data.me.username}</Box>
+                    as={`/user/${data.me.username}`}
+                >
+                    <Button variant="link">{data.me.username}</Button>
+                </NextLink>
                 <NextLink href="/create-beat">
                     <Button variant="link">create beat</Button>
                 </NextLink>
@@ -57,7 +58,7 @@ export const NavBar: React.FC = () => {
     }
 
     return (
-        <Flex bg="purple.800" p={4}>
+        <Flex zIndex={1} position="sticky" top={0} bg="purple.800" p={4}>
             <NextLink href="/">
                 <Button variant="link" mr="auto">
                     <Heading>Beat Store</Heading>
