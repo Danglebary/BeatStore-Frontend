@@ -1,10 +1,8 @@
 // General imports
 import React from "react";
 // Chakra imports
-import { Box } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/button";
+import { IconButton } from "@chakra-ui/button";
 import { Tooltip } from "@chakra-ui/tooltip";
-import Icon from "@chakra-ui/icon";
 import { useColorMode } from "@chakra-ui/color-mode";
 // React-icons imports
 import { BsSun, BsMoon } from "react-icons/bs";
@@ -15,14 +13,19 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({}) => {
     const { colorMode, toggleColorMode } = useColorMode();
 
     return (
-        <Box position="fixed" bottom={6} right={6}>
-            <Button onClick={toggleColorMode}>
-                <Tooltip label="toggles between light and dark mode!">
-                    <span>
-                        <Icon as={colorMode === "light" ? BsSun : BsMoon} />
-                    </span>
-                </Tooltip>
-            </Button>
-        </Box>
+        <>
+            <Tooltip label="toggle between light and dark mode!">
+                <IconButton
+                    size="md"
+                    fontSize="x-large"
+                    position="fixed"
+                    bottom={6}
+                    right={6}
+                    aria-label="toggle between light and dark mode"
+                    icon={colorMode === "light" ? <BsSun /> : <BsMoon />}
+                    onClick={toggleColorMode}
+                />
+            </Tooltip>
+        </>
     );
 };
