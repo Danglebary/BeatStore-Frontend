@@ -97,7 +97,8 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
             dedupExchange,
             cacheExchange({
                 keys: {
-                    PaginatedBeatsResponse: () => null
+                    PaginatedBeatsResponse: () => null,
+                    BeatResponse: () => null
                 },
                 resolvers: {
                     Query: {
