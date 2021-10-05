@@ -17,7 +17,8 @@ import {
     MeDocument,
     RegisterMutation,
     LogoutMutation,
-    LikeBeatMutationVariables
+    LikeBeatMutationVariables,
+    DeleteBeatMutationVariables
 } from "../generated/graphql";
 // Custom imports
 import { betterUpdateQuery } from "./betterUpdateQuery";
@@ -107,6 +108,12 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                 },
                 updates: {
                     Mutation: {
+                        deleteBeat: (_result, args, cache, _info) => {
+                            cache.invalidate({
+                                __typename: "Beat",
+                                id: (args as DeleteBeatMutationVariables).id
+                            });
+                        },
                         likeBeat: (_result, args, cache, _info) => {
                             const { beatId } =
                                 args as LikeBeatMutationVariables;
