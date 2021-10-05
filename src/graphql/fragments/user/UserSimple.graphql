@@ -1,4 +1,4 @@
 fragment UserSimple on User {
     id
-    userName
+    username
 }

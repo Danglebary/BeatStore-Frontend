@@ -9,6 +9,6 @@ fragment BeatSimple on Beat {
     likeStatus
     creator {
         id
-        userName
+        username
     }
 }

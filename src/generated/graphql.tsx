@@ -31,18 +31,18 @@ export type Beat = {
   url?: Maybe<Scalars['String']>;
 };
 
-export type BeatResponse = {
-  __typename?: 'BeatResponse';
-  beat?: Maybe<Beat>;
-  errors?: Maybe<Array<FieldError>>;
-};
-
 export type CreateBeatInput = {
   bpm?: Maybe<Scalars['Int']>;
   genre?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Scalars['String']>>;
   title: Scalars['String'];
+};
+
+export type CreateBeatResponse = {
+  __typename?: 'CreateBeatResponse';
+  beat?: Maybe<Beat>;
+  errors?: Maybe<Array<FieldError>>;
 };
 
 export type ErrorsOrValidResponse = {
@@ -73,18 +73,15 @@ export type LoginUserInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
-  createBeat: BeatResponse;
-  createPost: Post;
+  createBeat: CreateBeatResponse;
   deleteBeat: Scalars['Boolean'];
-  deletePost: Scalars['Boolean'];
   forgotPasswordDev: Scalars['Boolean'];
   likeBeat: ErrorsOrValidResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
   removeUser: Scalars['Boolean'];
-  updateBeat?: Maybe<Beat>;
-  updatePost?: Maybe<Post>;
+  updateBeat: CreateBeatResponse;
 };
 
 
@@ -99,17 +96,7 @@ export type MutationCreateBeatArgs = {
 };
 
 
-export type MutationCreatePostArgs = {
-  title: Scalars['String'];
-};
-
-
 export type MutationDeleteBeatArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationDeletePostArgs = {
   id: Scalars['Int'];
 };
 
@@ -143,24 +130,10 @@ export type MutationUpdateBeatArgs = {
   options: UpdateBeatInput;
 };
 
-
-export type MutationUpdatePostArgs = {
-  id: Scalars['Int'];
-  title: Scalars['String'];
-};
-
 export type PaginatedBeatsResponse = {
   __typename?: 'PaginatedBeatsResponse';
   beats: Array<Beat>;
   hasMore: Scalars['Boolean'];
-};
-
-export type Post = {
-  __typename?: 'Post';
-  createdAt: Scalars['String'];
-  id: Scalars['Int'];
-  title: Scalars['String'];
-  updatedAt: Scalars['String'];
 };
 
 export type Query = {
@@ -168,8 +141,6 @@ export type Query = {
   beat?: Maybe<Beat>;
   beats: PaginatedBeatsResponse;
   me?: Maybe<User>;
-  post?: Maybe<Post>;
-  posts: Array<Post>;
   user?: Maybe<User>;
   users: Array<User>;
 };
@@ -183,11 +154,6 @@ export type QueryBeatArgs = {
 export type QueryBeatsArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryPostArgs = {
-  id: Scalars['Int'];
 };
 
 
@@ -221,7 +187,7 @@ export type User = {
   likes: Array<Like>;
   location: Scalars['String'];
   updatedAt: Scalars['String'];
-  userName: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -232,20 +198,22 @@ export type UserResponse = {
 
 export type ErrorSimpleFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } };
+export type BeatFullFragment = { __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } };
 
-export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> };
+export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, creator: { __typename?: 'User', id: number, username: string } };
 
-export type UserResponseSimpleFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> };
+export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, creator: { __typename?: 'User', id: number, username: string } }> };
 
-export type UserSimpleFragment = { __typename?: 'User', id: number, userName: string };
+export type UserResponseSimpleFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> };
+
+export type UserSimpleFragment = { __typename?: 'User', id: number, username: string };
 
 export type CreateBeatMutationVariables = Exact<{
   options: CreateBeatInput;
 }>;
 
 
-export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'BeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, bpm?: Maybe<number>, key?: Maybe<string>, genre?: Maybe<string>, createdAt: string, updatedAt: string }> } };
+export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, bpm?: Maybe<number>, key?: Maybe<string>, genre?: Maybe<string>, createdAt: string, updatedAt: string }> } };
 
 export type LikeBeatMutationVariables = Exact<{
   beatId: Scalars['Int'];
@@ -260,7 +228,7 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> } };
 
 export type ForgotPasswordDevMutationVariables = Exact<{
   email: Scalars['String'];
@@ -274,7 +242,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -286,14 +254,14 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, userName: string }> } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> } };
 
 export type BeatQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type BeatQuery = { __typename?: 'Query', beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> };
+export type BeatQuery = { __typename?: 'Query', beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> };
 
 export type BeatsQueryVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
@@ -301,13 +269,31 @@ export type BeatsQueryVariables = Exact<{
 }>;
 
 
-export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, userName: string } }> } };
+export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<Array<string>>, likesCount: number, likeStatus: boolean, creator: { __typename?: 'User', id: number, username: string } }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: number, userName: string }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: number, username: string }> };
 
+export const BeatFullFragmentDoc = gql`
+    fragment BeatFull on Beat {
+  id
+  title
+  genre
+  bpm
+  key
+  tags
+  likesCount
+  likeStatus
+  creator {
+    id
+    username
+  }
+  createdAt
+  updatedAt
+}
+    `;
 export const BeatSimpleFragmentDoc = gql`
     fragment BeatSimple on Beat {
   id
@@ -320,10 +306,8 @@ export const BeatSimpleFragmentDoc = gql`
   likeStatus
   creator {
     id
-    userName
+    username
   }
-  createdAt
-  updatedAt
 }
     `;
 export const BeatsResponseSimpleFragmentDoc = gql`
@@ -343,7 +327,7 @@ export const ErrorSimpleFragmentDoc = gql`
 export const UserSimpleFragmentDoc = gql`
     fragment UserSimple on User {
   id
-  userName
+  username
 }
     `;
 export const UserResponseSimpleFragmentDoc = gql`
@@ -448,10 +432,10 @@ export function useRegisterMutation() {
 export const BeatDocument = gql`
     query Beat($id: Int!) {
   beat(id: $id) {
-    ...BeatSimple
+    ...BeatFull
   }
 }
-    ${BeatSimpleFragmentDoc}`;
+    ${BeatFullFragmentDoc}`;
 
 export function useBeatQuery(options: Omit<Urql.UseQueryArgs<BeatQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<BeatQuery>({ query: BeatDocument, ...options });

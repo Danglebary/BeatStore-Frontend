@@ -55,7 +55,11 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
             <BeatModal beat={beat} isOpen={isOpen} onClose={onClose} />
             <Box p={5} shadow="md" borderWidth="1px" borderRadius="0.5em">
                 <Flex>
-                    <Heading fontSize="x-large">{beat.title}</Heading>
+                    <NextLink href="/beat/[id]" as={`/beat/${beat.id}`}>
+                        <Link>
+                            <Heading fontSize="x-large">{beat.title}</Heading>
+                        </Link>
+                    </NextLink>
                     <Tooltip label="beat info">
                         <span style={{ marginLeft: "auto" }}>
                             <IconButton
