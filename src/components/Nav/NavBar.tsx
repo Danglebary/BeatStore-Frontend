@@ -66,7 +66,7 @@ export const NavBar: React.FC = () => {
             </NextLink>
             <Flex
                 justifyContent="center"
-                justifyItems="center"
+                alignItems="center"
                 gridGap="1em"
                 ml="auto"
             >
