@@ -7,22 +7,27 @@ import {
     FormErrorMessage,
     FormLabel
 } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
+import { Input, InputProps } from "@chakra-ui/input";
 
-type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
-    name: string;
-    label: string;
-};
+type InputFieldProps = InputHTMLAttributes<HTMLInputElement> &
+    InputProps & {
+        name: string;
+        label: string;
+        labelColor?: string;
+    };
 
 export const InputField: React.FC<InputFieldProps> = ({
     label,
+    labelColor = "",
     size: _,
     ...props
 }) => {
     const [field, { error }] = useField(props);
     return (
         <FormControl isInvalid={!!error}>
-            <FormLabel htmlFor={field.name}>{label}</FormLabel>
+            <FormLabel htmlFor={field.name} textColor={labelColor}>
+                {label}
+            </FormLabel>
             <Input
                 {...field}
                 {...props}
