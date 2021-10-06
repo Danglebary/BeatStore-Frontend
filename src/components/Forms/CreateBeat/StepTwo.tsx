@@ -52,6 +52,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ prev, next, data }) => {
                         />
                         <TagInputField
                             label="Any tags?"
+                            labelColor="cyan.500"
                             values={values}
                             setFieldValue={setFieldValue}
                         />
