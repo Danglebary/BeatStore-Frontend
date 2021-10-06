@@ -37,9 +37,11 @@ const Index: React.FC<{}> = () => {
     } else {
         body = (
             <Stack spacing={8}>
-                {data!.beats.beats.map((beat) => (
-                    <BeatCardMain beat={beat} key={beat.title + beat.id} />
-                ))}
+                {data!.beats.beats.map((beat) =>
+                    !beat ? null : (
+                        <BeatCardMain beat={beat} key={beat.title + beat.id} />
+                    )
+                )}
                 {data && data.beats.hasMore ? (
                     <Button onClick={handleLoadMore} isLoading={fetching}>
                         load more
