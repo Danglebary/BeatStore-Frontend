@@ -15,8 +15,9 @@ import { useDisclosure } from "@chakra-ui/hooks";
 // React Icon imports
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
+import { FaRegEdit } from "react-icons/fa";
 // Custom imports
-import { BeatModal } from "../Modals/BeatModal";
+import BeatInfoModal from "../Modals/BeatInfoModal";
 import AlertMain from "../Alerts/AlertMain";
 import { AlertOptions } from "../../types/alertTypes";
 import { isServer } from "../../utils/isServer";
@@ -59,7 +60,7 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                     onClose={() => setLikeError("")}
                 />
             )}
-            <BeatModal beat={beat} isOpen={isOpen} onClose={onClose} />
+            <BeatInfoModal beat={beat} isOpen={isOpen} onClose={onClose} />
             <Box p={5} shadow="md" borderWidth="1px" borderRadius="0.5em">
                 <Flex>
                     <NextLink href="/beat/[id]" as={`/beat/${beat.id}`}>
@@ -67,16 +68,27 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                             <Heading fontSize="x-large">{beat.title}</Heading>
                         </Link>
                     </NextLink>
-                    <Tooltip label="beat info">
-                        <span style={{ marginLeft: "auto" }}>
+                    <Box ml="auto">
+                        <Tooltip label="beat info">
                             <IconButton
                                 fontSize="x-large"
+                                mr={4}
                                 aria-label="beat info"
                                 icon={<AiOutlineInfoCircle />}
                                 onClick={onOpen}
                             />
-                        </span>
-                    </Tooltip>
+                        </Tooltip>
+                        {meData?.me?.id !== beat.creator.id ? null : (
+                            <Tooltip label="update beat info">
+                                <IconButton
+                                    fontSize="x-large"
+                                    aria-label="update beat info"
+                                    colorScheme="green"
+                                    icon={<FaRegEdit />}
+                                />
+                            </Tooltip>
+                        )}
+                    </Box>
                 </Flex>
                 <Flex mt={2}>
                     <Text>
