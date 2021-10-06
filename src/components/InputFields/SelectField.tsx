@@ -1,32 +1,43 @@
 // General imports
 import React, { SelectHTMLAttributes } from "react";
+// Formik imports
 import { useField } from "formik";
 // Chakra imports
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { SelectField as Select } from "@chakra-ui/react";
+import { SelectField as Select, SelectFieldProps } from "@chakra-ui/react";
+import {
+    FormControl,
+    FormErrorMessage,
+    FormLabel
+} from "@chakra-ui/form-control";
 
-type SelectFieldProps = SelectHTMLAttributes<HTMLSelectElement> & {
-    name: string;
-    label: string;
-    options: { option: string; value: string }[];
-};
+type SelectInputFieldProps = SelectHTMLAttributes<HTMLSelectElement> &
+    SelectFieldProps & {
+        name: string;
+        label: string;
+        labelColor?: string;
+        options: { option: string; value: string }[];
+    };
 
-export const SelectField: React.FC<SelectFieldProps> = ({
+export const SelectField: React.FC<SelectInputFieldProps> = ({
     label,
+    labelColor = "",
     options,
     ...props
 }) => {
-    const [field] = useField(props);
+    const [field, { error }] = useField(props);
     return (
         <FormControl>
-            <FormLabel htmlFor={field.name}>{label}</FormLabel>
-            <Select {...field} {...props}>
+            <FormLabel htmlFor={field.name} textColor={labelColor}>
+                {label}
+            </FormLabel>
+            <Select {...field} {...props} id={field.name}>
                 {options.map(({ option, value }) => (
-                    <option key={option} value={value}>
+                    <option key={value} value={value} id={value}>
                         {option}
                     </option>
                 ))}
             </Select>
+            {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
         </FormControl>
     );
 };
