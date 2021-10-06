@@ -18,6 +18,7 @@ import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { FaRegEdit } from "react-icons/fa";
 // Custom imports
 import BeatInfoModal from "../Modals/BeatInfoModal";
+import BeatUpdateModal from "../Modals/BeatUpdateModal";
 import AlertMain from "../Alerts/AlertMain";
 import { AlertOptions } from "../../types/alertTypes";
 import { isServer } from "../../utils/isServer";
@@ -31,9 +32,17 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
     const [{ data: meData }] = useMeQuery({
         pause: isServer()
     });
-    // show like button state
     // more info modal
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: infoIsOpen,
+        onOpen: infoOnOpen,
+        onClose: infoOnClose
+    } = useDisclosure();
+    const {
+        isOpen: editIsOpen,
+        onOpen: editOnOpen,
+        onClose: editOnClose
+    } = useDisclosure();
     // like beat error state
     const [likeError, setLikeError] = useState("");
     // like beat mutation
@@ -60,7 +69,16 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                     onClose={() => setLikeError("")}
                 />
             )}
-            <BeatInfoModal beat={beat} isOpen={isOpen} onClose={onClose} />
+            <BeatUpdateModal
+                beat={beat}
+                isOpen={editIsOpen}
+                onClose={editOnClose}
+            />
+            <BeatInfoModal
+                beat={beat}
+                isOpen={infoIsOpen}
+                onClose={infoOnClose}
+            />
             <Box p={5} shadow="md" borderWidth="1px" borderRadius="0.5em">
                 <Flex>
                     <NextLink href="/beat/[id]" as={`/beat/${beat.id}`}>
@@ -75,7 +93,7 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                                 mr={4}
                                 aria-label="beat info"
                                 icon={<AiOutlineInfoCircle />}
-                                onClick={onOpen}
+                                onClick={infoOnOpen}
                             />
                         </Tooltip>
                         {meData?.me?.id !== beat.creator.id ? null : (
@@ -85,6 +103,7 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                                     aria-label="update beat info"
                                     colorScheme="green"
                                     icon={<FaRegEdit />}
+                                    onClick={editOnOpen}
                                 />
                             </Tooltip>
                         )}
@@ -105,27 +124,24 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                                     : "like this beat"
                             }
                         >
-                            <span style={{ marginLeft: "auto" }}>
-                                <IconButton
-                                    fontSize="x-large"
-                                    aria-label={
-                                        beat.likeStatus
-                                            ? "unlike this beat"
-                                            : "like this beat"
-                                    }
-                                    icon={
-                                        beat.likeStatus ? (
-                                            <HiHeart />
-                                        ) : (
-                                            <HiOutlineHeart />
-                                        )
-                                    }
-                                    colorScheme={
-                                        beat.likeStatus ? "red" : "gray"
-                                    }
-                                    onClick={handleLikeBeat}
-                                />
-                            </span>
+                            <IconButton
+                                ml="auto"
+                                fontSize="x-large"
+                                aria-label={
+                                    beat.likeStatus
+                                        ? "unlike this beat"
+                                        : "like this beat"
+                                }
+                                icon={
+                                    beat.likeStatus ? (
+                                        <HiHeart />
+                                    ) : (
+                                        <HiOutlineHeart />
+                                    )
+                                }
+                                colorScheme={beat.likeStatus ? "red" : "gray"}
+                                onClick={handleLikeBeat}
+                            />
                         </Tooltip>
                     )}
                 </Flex>
