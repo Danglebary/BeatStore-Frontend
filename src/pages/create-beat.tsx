@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 // GraphQL imports
-import { useCreateBeatMutation } from "../generated/graphql";
+import { CreateBeatInput, useCreateBeatMutation } from "../generated/graphql";
 // Custom imports
 import { useIsAuth } from "../utils/useIsAuth";
 import StepOne from "../components/Forms/CreateBeat/StepOne";
@@ -32,7 +32,7 @@ const CreateBeat: React.FC = () => {
 
     const [currentStep, setCurrentStep] = useState(0);
 
-    const handleSubmit = async (values: CreateBeatFormDataType) => {
+    const handleSubmit = async (values: CreateBeatInput) => {
         const { error } = await uploadBeat({ options: values });
         if (!error) {
             router.push("/");
