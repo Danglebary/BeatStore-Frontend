@@ -36,7 +36,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ prev, next, data }) => {
                             type="number"
                             label="What is the bpm?"
                             labelColor="cyan.500"
-                            placeholder="154"
+                            placeholder="'140...'"
                         />
                         <SelectField
                             width="100%"
