@@ -1,0 +1,15 @@
+fragment BeatMain on Beat {
+    id
+    title
+    genre
+    bpm
+    key
+    tags
+    likesCount
+    likeStatus
+    creator {
+        id
+        username
+    }
+    createdAt
+}

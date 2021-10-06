@@ -6,10 +6,6 @@ fragment BeatSimple on Beat {
     key
     tags
     likesCount
-    likeStatus
-    creator {
-        id
-        username
-    }
     createdAt
+    updatedAt
 }

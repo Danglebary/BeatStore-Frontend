@@ -1,5 +1,5 @@
-mutation CreateBeat($options: CreateBeatInput!) {
-    createBeat(options: $options) {
+mutation UpdateBeat($options: UpdateBeatInput!) {
+    updateBeat(options: $options) {
         errors {
             ...ErrorSimple
         }
