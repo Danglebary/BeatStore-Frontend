@@ -1,47 +1,19 @@
 // General imports
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { Formik, Form } from "formik";
 // Urql imports
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 // GraphQL imports
-// Chakra imports
-import { Button } from "@chakra-ui/react";
-// Custom imports
-import { Layout } from "../components/Wrappers/Layout";
-import { InputField } from "../components/InputFields/InputField";
-import { SelectField } from "../components/InputFields/SelectField";
 import { useCreateBeatMutation } from "../generated/graphql";
-import { TagInputField } from "../components/InputFields/TagInputField";
+// Custom imports
 import { useIsAuth } from "../utils/useIsAuth";
-
-const allKeys = [
-    { option: "C major", value: "C major" },
-    { option: "C minor", value: "C minor" },
-    { option: "C# major", value: "C# major" },
-    { option: "C# minor", value: "C# minor" },
-    { option: "D major", value: "D major" },
-    { option: "D minor", value: "D minor" },
-    { option: "D# major", value: "D# major" },
-    { option: "D# minor", value: "D# minor" },
-    { option: "E major", value: "E major" },
-    { option: "E minor", value: "E minor" },
-    { option: "F major", value: "F major" },
-    { option: "F minor", value: "F minor" },
-    { option: "F# major", value: "F# major" },
-    { option: "F# minor", value: "F# minor" },
-    { option: "G major", value: "G major" },
-    { option: "G minor", value: "G minor" },
-    { option: "G# major", value: "G# major" },
-    { option: "G# minor", value: "G# minor" },
-    { option: "A major", value: "A major" },
-    { option: "A minor", value: "A minor" },
-    { option: "A# major", value: "A# major" },
-    { option: "A# minor", value: "A# minor" },
-    { option: "B major", value: "B major" },
-    { option: "B minor", value: "B minor" }
-];
+import StepOne from "../components/Forms/CreateBeat/StepOne";
+import StepTwo from "../components/Forms/CreateBeat/StepTwo";
+import StepThree from "../components/Forms/CreateBeat/StepThree";
+import { CreateBeatFormDataType } from "../types/createBeatFormInputTypes";
+import { MusicalKeys } from "../types/musicalKeysTypes";
+import { Layout } from "../components/Wrappers/Layout";
 
 const CreateBeat: React.FC = () => {
     useIsAuth();
@@ -50,56 +22,45 @@ const CreateBeat: React.FC = () => {
 
     const [{}, uploadBeat] = useCreateBeatMutation();
 
-    return (
-        <Layout varient="small">
-            <Formik
-                initialValues={{
-                    title: "",
-                    genre: null,
-                    bpm: null,
-                    key: null,
-                    tags: null
-                }}
-                onSubmit={async (values) => {
-                    console.log(values);
-                    const { error } = await uploadBeat({ options: values });
-                    if (!error) {
-                        router.push("/");
-                    }
-                }}
-            >
-                {({ isSubmitting, submitForm, setFieldValue }) => (
-                    <Form>
-                        <InputField
-                            name="title"
-                            label="title"
-                            placeholder="title"
-                        />
-                        <InputField
-                            name="genre"
-                            label="genre"
-                            placeholder="'trap'"
-                        />
-                        <InputField
-                            name="bpm"
-                            label="bpm"
-                            placeholder="140"
-                            type="number"
-                        />
-                        <SelectField name="key" label="key" options={allKeys} />
-                        <TagInputField setFieldValue={setFieldValue} />
-                        <Button
-                            type="button"
-                            onClick={submitForm}
-                            isLoading={isSubmitting}
-                        >
-                            upload beat
-                        </Button>
-                    </Form>
-                )}
-            </Formik>
-        </Layout>
-    );
+    const [data, setData] = useState({
+        title: "",
+        genre: "",
+        bpm: 0,
+        key: MusicalKeys.C_MAJOR,
+        tags: []
+    } as CreateBeatFormDataType);
+
+    const [currentStep, setCurrentStep] = useState(0);
+
+    const handleSubmit = async (values: CreateBeatFormDataType) => {
+        console.log(values);
+        const { error } = await uploadBeat({ options: values });
+        if (!error) {
+            router.push("/");
+        }
+    };
+
+    const handleNextStep = (newData: CreateBeatFormDataType, final = false) => {
+        setData((prev) => ({ ...prev, ...newData }));
+        if (final) {
+            handleSubmit(newData);
+            return;
+        }
+        setCurrentStep((prev) => prev + 1);
+    };
+
+    const handlePrevStep = (newData: CreateBeatFormDataType) => {
+        setData((prev) => ({ ...prev, ...newData }));
+        setCurrentStep((prev) => prev - 1);
+    };
+
+    const steps = [
+        <StepOne next={handleNextStep} data={data} />,
+        <StepTwo prev={handlePrevStep} next={handleNextStep} data={data} />,
+        <StepThree prev={handlePrevStep} next={handleNextStep} data={data} />
+    ];
+
+    return <Layout varient="small">{steps[currentStep]}</Layout>;
 };
 
 export default withUrqlClient(createUrqlClient)(CreateBeat);
