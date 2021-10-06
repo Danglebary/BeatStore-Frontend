@@ -33,7 +33,6 @@ const CreateBeat: React.FC = () => {
     const [currentStep, setCurrentStep] = useState(0);
 
     const handleSubmit = async (values: CreateBeatFormDataType) => {
-        console.log(values);
         const { error } = await uploadBeat({ options: values });
         if (!error) {
             router.push("/");
