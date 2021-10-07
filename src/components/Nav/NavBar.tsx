@@ -37,7 +37,7 @@ export const NavBar: React.FC = () => {
         body = (
             <>
                 <NextLink href="/create-beat">
-                    <Button as={Link} mr={4}>
+                    <Button as={Link} mr={4} tabIndex={0}>
                         create beat
                     </Button>
                 </NextLink>
