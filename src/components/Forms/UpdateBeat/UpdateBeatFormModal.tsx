@@ -68,10 +68,12 @@ const UpdateBeatFormModal: React.FC<UpdateBeatFormModalProps> = ({
                     name="key"
                     label="key?"
                     labelColor="cyan.500"
+                    borderBottomStyle="solid"
+                    borderBottomWidth="1px"
                     options={AllKeys}
                 />
                 <TagInputField
-                    label="tags"
+                    label="tags?"
                     labelColor="cyan.500"
                     values={values}
                     setFieldValue={setFieldValue}
