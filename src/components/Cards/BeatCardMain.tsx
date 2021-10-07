@@ -1,33 +1,30 @@
 // General imports
-import React, { useState } from "react";
+import React from "react";
 import NextLink from "next/link";
 // GraphQL type imports
 import {
-    BeatSimpleFragment,
+    BeatMainFragment,
     useLikeBeatMutation,
     useMeQuery
 } from "../../generated/graphql";
 // Chakra imports
 import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Tooltip } from "@chakra-ui/tooltip";
-import { IconButton } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
-// React Icon imports
-import { AiOutlineInfoCircle } from "react-icons/ai";
-import { HiHeart, HiOutlineHeart } from "react-icons/hi";
-import { FaRegEdit } from "react-icons/fa";
 // Custom imports
+import { BeatInfoButton } from "../buttons/BeatInfoButton";
+import { BeatEditButton } from "../buttons/BeatEditButton";
+import { BeatLikeButton } from "../buttons/BeatLikeButton";
 import BeatInfoModal from "../Modals/BeatInfoModal";
 import BeatUpdateModal from "../Modals/BeatUpdateModal";
-import AlertMain from "../Alerts/AlertMain";
-import { AlertOptions } from "../../types/alertTypes";
 import { isServer } from "../../utils/isServer";
+import { useRouter } from "next/router";
 
 interface BeatCardMainProps {
-    beat: BeatSimpleFragment;
+    beat: BeatMainFragment;
 }
 
 export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
+    const router = useRouter();
     // me query info
     const [{ data: meData }] = useMeQuery({
         pause: isServer()
@@ -38,37 +35,28 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
         onOpen: infoOnOpen,
         onClose: infoOnClose
     } = useDisclosure();
+    // edit beat modal
     const {
         isOpen: editIsOpen,
         onOpen: editOnOpen,
         onClose: editOnClose
     } = useDisclosure();
-    // like beat error state
-    const [likeError, setLikeError] = useState("");
+
     // like beat mutation
     const [{}, likeBeat] = useLikeBeatMutation();
 
     const handleLikeBeat = async () => {
+        if (!meData?.me?.id) {
+            router.push("/login");
+        }
         const result = await likeBeat({ beatId: beat.id });
         if (result.data?.likeBeat.error) {
-            if (result.data.likeBeat.error.field === "like") {
-                setLikeError(result.data.likeBeat.error.message);
-            } else {
-                console.log(result.data.likeBeat.error);
-            }
+            console.log(result.data.likeBeat.error);
         }
     };
 
     return (
         <>
-            {!likeError ? null : (
-                <AlertMain
-                    status={AlertOptions.ERROR}
-                    title="like"
-                    description={likeError}
-                    onClose={() => setLikeError("")}
-                />
-            )}
             <BeatUpdateModal
                 beat={beat}
                 isOpen={editIsOpen}
@@ -87,25 +75,14 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                         </Link>
                     </NextLink>
                     <Box ml="auto">
-                        <Tooltip label="beat info">
-                            <IconButton
-                                fontSize="x-large"
-                                mr={4}
-                                aria-label="beat info"
-                                icon={<AiOutlineInfoCircle />}
-                                onClick={infoOnOpen}
+                        <BeatInfoButton onOpen={infoOnOpen} />
+                        {meData?.me?.id !== beat.creator.id ? (
+                            <BeatLikeButton
+                                likeStatus={beat.likeStatus}
+                                handleClick={handleLikeBeat}
                             />
-                        </Tooltip>
-                        {meData?.me?.id !== beat.creator.id ? null : (
-                            <Tooltip label="update beat info">
-                                <IconButton
-                                    fontSize="x-large"
-                                    aria-label="update beat info"
-                                    colorScheme="green"
-                                    icon={<FaRegEdit />}
-                                    onClick={editOnOpen}
-                                />
-                            </Tooltip>
+                        ) : (
+                            <BeatEditButton onOpen={editOnOpen} />
                         )}
                     </Box>
                 </Flex>
@@ -116,34 +93,6 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                             <Link>{beat.creator.username}</Link>
                         </NextLink>
                     </Text>
-                    {meData?.me?.id === beat.creator.id ? null : (
-                        <Tooltip
-                            label={
-                                beat.likeStatus
-                                    ? "unlike this beat"
-                                    : "like this beat"
-                            }
-                        >
-                            <IconButton
-                                ml="auto"
-                                fontSize="x-large"
-                                aria-label={
-                                    beat.likeStatus
-                                        ? "unlike this beat"
-                                        : "like this beat"
-                                }
-                                icon={
-                                    beat.likeStatus ? (
-                                        <HiHeart />
-                                    ) : (
-                                        <HiOutlineHeart />
-                                    )
-                                }
-                                colorScheme={beat.likeStatus ? "red" : "gray"}
-                                onClick={handleLikeBeat}
-                            />
-                        </Tooltip>
-                    )}
                 </Flex>
             </Box>
         </>
