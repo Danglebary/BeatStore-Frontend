@@ -46,10 +46,6 @@ const BeatUpdateModal: React.FC<BeatUpdateModalProps> = ({
     const handleDeleteBeat = () => {
         deleteBeat({ id: beat.id });
     };
-    let tagsArray: string[] = [];
-    if (beat.tags) {
-        tagsArray = beat.tags.split(",");
-    }
 
     const initialValues: UpdateBeatInput = {
         id: beat.id,
@@ -57,7 +53,7 @@ const BeatUpdateModal: React.FC<BeatUpdateModalProps> = ({
         genre: beat.genre ? beat.genre : "",
         bpm: beat.bpm ? beat.bpm : 0,
         key: beat.key ? (beat.key as MusicalKeys) : MusicalKeys.C_MAJOR,
-        tags: tagsArray
+        tags: beat.tags
     };
 
     return (
