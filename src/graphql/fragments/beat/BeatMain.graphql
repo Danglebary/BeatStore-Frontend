@@ -12,4 +12,5 @@ fragment BeatMain on Beat {
         username
     }
     createdAt
+    updatedAt
 }

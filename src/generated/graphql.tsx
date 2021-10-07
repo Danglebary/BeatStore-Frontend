@@ -16,26 +16,26 @@ export type Scalars = {
 
 export type Beat = {
   __typename?: 'Beat';
-  bpm?: Maybe<Scalars['Int']>;
+  bpm: Scalars['Int'];
   createdAt: Scalars['String'];
   creator: User;
   creatorId: Scalars['Int'];
-  genre?: Maybe<Scalars['String']>;
+  genre: Scalars['String'];
   id: Scalars['Int'];
-  key?: Maybe<Scalars['String']>;
+  key: Scalars['String'];
   likeStatus: Scalars['Boolean'];
   likesCount: Scalars['Int'];
-  tags?: Maybe<Scalars['String']>;
+  tags: Array<Scalars['String']>;
   title: Scalars['String'];
   updatedAt: Scalars['String'];
   url?: Maybe<Scalars['String']>;
 };
 
 export type CreateBeatInput = {
-  bpm?: Maybe<Scalars['Int']>;
-  genre?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-  tags?: Maybe<Array<Scalars['String']>>;
+  bpm: Scalars['Int'];
+  genre: Scalars['String'];
+  key: Scalars['String'];
+  tags: Array<Scalars['String']>;
   title: Scalars['String'];
 };
 
@@ -175,12 +175,12 @@ export type RegisterUserInput = {
 };
 
 export type UpdateBeatInput = {
-  bpm?: Maybe<Scalars['Int']>;
-  genre?: Maybe<Scalars['String']>;
+  bpm: Scalars['Int'];
+  genre: Scalars['String'];
   id: Scalars['Int'];
-  key?: Maybe<Scalars['String']>;
-  tags?: Maybe<Array<Scalars['String']>>;
-  title?: Maybe<Scalars['String']>;
+  key: Scalars['String'];
+  tags: Array<Scalars['String']>;
+  title: Scalars['String'];
 };
 
 export type User = {
@@ -204,15 +204,15 @@ export type UserResponse = {
 
 export type ErrorSimpleFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type BeatFullFragment = { __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } };
+export type BeatFullFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } };
 
-export type BeatMainFragment = { __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, likeStatus: boolean, createdAt: string, creator: { __typename?: 'User', id: number, username: string } };
+export type BeatMainFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } };
 
-export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, createdAt: string, updatedAt: string };
+export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string };
 
-export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, likeStatus: boolean, createdAt: string, creator: { __typename?: 'User', id: number, username: string } }> };
+export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> };
 
-export type UserFullFragment = { __typename?: 'User', id: number, username: string, email: string, location: string, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, createdAt: string, updatedAt: string }> };
+export type UserFullFragment = { __typename?: 'User', id: number, username: string, email: string, location: string, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string }> };
 
 export type UserResponseSimpleFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> };
 
@@ -223,7 +223,7 @@ export type CreateBeatMutationVariables = Exact<{
 }>;
 
 
-export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, createdAt: string, updatedAt: string }> } };
+export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string }> } };
 
 export type DeleteBeatMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -244,7 +244,7 @@ export type UpdateBeatMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBeatMutation = { __typename?: 'Mutation', updateBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, createdAt: string, updatedAt: string }> } };
+export type UpdateBeatMutation = { __typename?: 'Mutation', updateBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string }> } };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -285,7 +285,7 @@ export type BeatQueryVariables = Exact<{
 }>;
 
 
-export type BeatQuery = { __typename?: 'Query', beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> };
+export type BeatQuery = { __typename?: 'Query', beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> };
 
 export type BeatsQueryVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
@@ -293,7 +293,7 @@ export type BeatsQueryVariables = Exact<{
 }>;
 
 
-export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, likeStatus: boolean, createdAt: string, creator: { __typename?: 'User', id: number, username: string } }> } };
+export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -305,7 +305,7 @@ export type UserByUsernameQueryVariables = Exact<{
 }>;
 
 
-export type UserByUsernameQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', id: number, username: string, email: string, location: string, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre?: Maybe<string>, bpm?: Maybe<number>, key?: Maybe<string>, tags?: Maybe<string>, likesCount: number, createdAt: string, updatedAt: string }> }> };
+export type UserByUsernameQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', id: number, username: string, email: string, location: string, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string }> }> };
 
 export const BeatFullFragmentDoc = gql`
     fragment BeatFull on Beat {
@@ -340,6 +340,7 @@ export const BeatMainFragmentDoc = gql`
     username
   }
   createdAt
+  updatedAt
 }
     `;
 export const BeatsResponseSimpleFragmentDoc = gql`
