@@ -16,7 +16,7 @@ export const FormProgressStepper: React.FC<FormProgressStepperProps> = ({
     return (
         <Flex justify="center" align="center" mb={6}>
             {steps.map((_, index) => (
-                <>
+                <React.Fragment key={index + "stepper"}>
                     <Circle
                         size="1.5em"
                         layerStyle={currentStep > index ? "selected" : "base"}
@@ -35,7 +35,7 @@ export const FormProgressStepper: React.FC<FormProgressStepperProps> = ({
                             height="5px"
                         />
                     ) : null}
-                </>
+                </React.Fragment>
             ))}
         </Flex>
     );
