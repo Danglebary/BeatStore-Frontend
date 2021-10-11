@@ -45,9 +45,11 @@ const StepThree: React.FC<StepThreeProps> = ({ prev, next, data }) => {
                     gridGap={2}
                 >
                     {data.tags.map((tag) => (
-                        <Tag>{tag}</Tag>
+                        <Tag key={tag}>{tag}</Tag>
                     ))}
                 </Flex>
+                <Box textColor="cyan.500">File:</Box>
+                <Box>{data.file?.name}</Box>
             </Grid>
             <Flex mt={4} flexDirection="row" justifyContent="space-between">
                 <Button onClick={() => prev(data)}>Back</Button>
