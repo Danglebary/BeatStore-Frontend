@@ -7,6 +7,7 @@ fragment BeatMain on Beat {
     tags
     likesCount
     likeStatus
+    s3Key
     creator {
         id
         username
