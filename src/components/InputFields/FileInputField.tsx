@@ -1,13 +1,15 @@
 // General imports
-import React, { InputHTMLAttributes } from "react";
-import { useField } from "formik";
+import React, { useRef } from "react";
 // Chakra imports
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input } from "@chakra-ui/input";
+import { Flex, Text } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
+import { CreateBeatFormDataType } from "../../types/createBeatFormInputTypes";
 
-type FileInputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
-    name: string;
-    label: string;
-    setFieldValue: (
+type FileInputFieldProps = {
+    values: CreateBeatFormDataType;
+    accept: string;
+    setFieldValues: (
         field: string,
         value: any,
         shouldValidate?: boolean | undefined
@@ -15,25 +17,38 @@ type FileInputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export const FileInputField: React.FC<FileInputFieldProps> = ({
-    label,
-    setFieldValue,
-    ...props
+    accept,
+    values,
+    setFieldValues
 }) => {
-    const [field] = useField(props);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    const handleChange = (e: any) => {
-        setFieldValue("file", e.target.files[0]);
+    const handleInputClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
     };
 
+    const handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void =
+        (e) => {
+            if (e.currentTarget.files) {
+                setFieldValues("file", e.currentTarget.files[0]);
+            }
+        };
+
     return (
-        <FormControl>
-            <FormLabel htmlFor={field.name}>{label}</FormLabel>
-            <input
-                id={field.name}
+        <Flex justify="left" align="center">
+            <Input
+                variant="flushed"
                 type="file"
-                accept="audio/wav, audio/mp3"
-                onChange={handleChange}
+                accept={accept}
+                multiple={false}
+                ref={fileInputRef}
+                onChange={(e) => handleInputChange(e)}
+                hidden
             />
-        </FormControl>
+            <Button onClick={handleInputClick}>Choose file</Button>
+            {!values.file ? null : <Text ml={4}>{values.file.name}</Text>}
+        </Flex>
     );
 };
