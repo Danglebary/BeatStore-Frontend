@@ -1,13 +1,14 @@
 // General imports
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 // Chakra imports
 import { Box, Heading } from "@chakra-ui/layout";
 // Urql imports
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 // GraphQL imports
-import { CreateBeatInput, useCreateBeatMutation } from "../generated/graphql";
+import { useCreateBeatMutation } from "../generated/graphql";
 // Custom imports
 import { Layout } from "../components/Wrappers/Layout";
 import StepOne from "../components/Forms/CreateBeat/StepOne";
@@ -30,15 +31,42 @@ const CreateBeat: React.FC = () => {
         genre: "",
         bpm: 0,
         key: MusicalKeys.C_MAJOR,
-        tags: []
+        tags: [],
+        file: null
     } as CreateBeatFormDataType);
 
     const [currentStep, setCurrentStep] = useState(0);
 
-    const handleSubmit = async (values: CreateBeatInput) => {
-        const { error } = await uploadBeat({ options: values });
-        if (!error) {
-            router.push("/");
+    const handleSubmit = async (values: CreateBeatFormDataType) => {
+        const { file, ...gqlValues } = values;
+
+        if (file) {
+            const formData = new FormData();
+            formData.append("file", file);
+            console.log("sending file");
+            const res = await axios
+                .post("http://localhost:1337/upload-beat", formData, {
+                    headers: { "content-type": "mutipart/form-data" }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return;
+                });
+            if (res) {
+                const key = res.data.toString();
+                const { error, data } = await uploadBeat({
+                    options: { ...gqlValues, s3Key: key }
+                });
+                if (!error) {
+                    if (data?.createBeat.errors) {
+                        console.log("errors: ", data.createBeat.errors);
+                    } else if (data?.createBeat.beat) {
+                        router.push(`/beat/${data.createBeat.beat.id}`);
+                    }
+                }
+            }
+        } else {
+            console.log("you have to upload a file...");
         }
     };
 
