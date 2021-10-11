@@ -11,6 +11,7 @@ import { Heading, Stack } from "@chakra-ui/layout";
 import { Layout } from "../components/Wrappers/Layout";
 import { Button } from "@chakra-ui/button";
 import { BeatCardMain } from "../components/Cards/BeatCardMain";
+import { AudioMain } from "../components/Audio/AudioMain";
 
 const Index: React.FC<{}> = () => {
     const [variables, setVariables] = useState({
@@ -37,6 +38,7 @@ const Index: React.FC<{}> = () => {
     } else {
         body = (
             <Stack spacing={8}>
+                <AudioMain beats={data!.beats.beats} />
                 {data!.beats.beats.map((beat) =>
                     !beat ? null : (
                         <BeatCardMain beat={beat} key={beat.title + beat.id} />
