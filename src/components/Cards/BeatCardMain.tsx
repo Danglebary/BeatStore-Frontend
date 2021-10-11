@@ -11,9 +11,9 @@ import {
 import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import { useDisclosure } from "@chakra-ui/hooks";
 // Custom imports
-import { BeatInfoButton } from "../buttons/BeatInfoButton";
-import { BeatEditButton } from "../buttons/BeatEditButton";
-import { BeatLikeButton } from "../buttons/BeatLikeButton";
+import { BeatInfoButton } from "../Buttons/BeatInfoButton";
+import { BeatEditButton } from "../Buttons/BeatEditButton";
+import { BeatLikeButton } from "../Buttons/BeatLikeButton";
 import BeatInfoModal from "../Modals/BeatInfoModal";
 import BeatUpdateModal from "../Modals/BeatUpdateModal";
 import { isServer } from "../../utils/isServer";
@@ -86,13 +86,18 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                         )}
                     </Box>
                 </Flex>
-                <Flex mt={2}>
+                <Flex mt={2} align="center" gridGap={4}>
                     <Text>
                         Prod.{" "}
                         <NextLink href={`/users/${beat.creator.id}`}>
                             <Link>{beat.creator.username}</Link>
                         </NextLink>
                     </Text>
+                    {/* <audio
+                        src={`http://localhost:1337/beat/${beat.s3Key}`}
+                        controls={true}
+                        preload="metadata"
+                    /> */}
                 </Flex>
             </Box>
         </>
