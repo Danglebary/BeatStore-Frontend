@@ -7,4 +7,5 @@ export type CreateBeatFormDataType = {
     bpm: number;
     key: MusicalKeys;
     tags: string[];
+    file: File | null;
 };
