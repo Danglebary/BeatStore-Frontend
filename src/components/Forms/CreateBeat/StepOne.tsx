@@ -8,6 +8,7 @@ import { Button } from "@chakra-ui/button";
 // Custom imports
 import { InputField } from "../../InputFields/InputField";
 import { CreateBeatFormDataType } from "../../../types/createBeatFormInputTypes";
+import { FileInputField } from "../../InputFields/FileInputField";
 
 interface StepOneProps {
     next: (newData: CreateBeatFormDataType, final?: boolean) => void;
@@ -21,7 +22,7 @@ const StepOne: React.FC<StepOneProps> = ({ next, data }) => {
 
     return (
         <Formik initialValues={data} onSubmit={handleSubmit}>
-            {({}) => (
+            {({ values, setFieldValue }) => (
                 <Form>
                     <Flex flexDirection="column" gridGap={6}>
                         <InputField
@@ -41,6 +42,11 @@ const StepOne: React.FC<StepOneProps> = ({ next, data }) => {
                             label="What genre best describes this beat?"
                             labelColor="cyan.500"
                             placeholder="e.g 'Pop'..."
+                        />
+                        <FileInputField
+                            accept="audio/*"
+                            values={values}
+                            setFieldValues={setFieldValue}
                         />
                         <Button ml="auto" mt={4} type="submit">
                             Next
