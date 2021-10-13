@@ -180,7 +180,6 @@ export type UpdateBeatInput = {
   genre: Scalars['String'];
   id: Scalars['Int'];
   key: Scalars['String'];
-  s3Key: Scalars['String'];
   tags: Array<Scalars['String']>;
   title: Scalars['String'];
 };
