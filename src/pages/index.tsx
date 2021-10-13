@@ -38,7 +38,9 @@ const Index: React.FC<{}> = () => {
     } else {
         body = (
             <Stack spacing={8}>
-                <AudioMain beats={data!.beats.beats} />
+                {data && data.beats.beats.length > 0 ? (
+                    <AudioMain beats={data.beats.beats} />
+                ) : null}
                 {data!.beats.beats.map((beat) =>
                     !beat ? null : (
                         <BeatCardMain beat={beat} key={beat.title + beat.id} />
