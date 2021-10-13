@@ -93,11 +93,6 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                             <Link>{beat.creator.username}</Link>
                         </NextLink>
                     </Text>
-                    {/* <audio
-                        src={`http://localhost:1337/beat/${beat.s3Key}`}
-                        controls={true}
-                        preload="metadata"
-                    /> */}
                 </Flex>
             </Box>
         </>
