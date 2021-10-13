@@ -40,7 +40,12 @@ export const TagInputField: React.FC<TagInputFieldProps> = ({
     // function called when 'enter' or 'spacebar' key is pressed while input element is focused or active
     const handleChange: (event: React.KeyboardEvent<HTMLInputElement>) => void =
         (event) => {
-            if (event.code === "Enter" || event.code === "Space") {
+            if (
+                event.code === "Enter" ||
+                event.code === "Space" ||
+                event.code === "Comma"
+            ) {
+                event.preventDefault();
                 const data = inputRef.current.value.trim().toLowerCase();
 
                 // no duplicates
@@ -51,6 +56,10 @@ export const TagInputField: React.FC<TagInputFieldProps> = ({
                 }
                 // no empty strings
                 if (data === "") {
+                    inputRef.current.value = "";
+                    return;
+                }
+                if (data === ",") {
                     inputRef.current.value = "";
                     return;
                 }
