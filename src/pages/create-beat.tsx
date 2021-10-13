@@ -18,13 +18,14 @@ import StepThree from "../components/Forms/CreateBeat/StepThree";
 import { CreateBeatFormDataType } from "../types/createBeatFormInputTypes";
 import { MusicalKeys } from "../types/musicalKeysTypes";
 import { useIsAuth } from "../utils/useIsAuth";
+import { ProgressMain } from "../components/Progress/ProgressMain";
 
 const CreateBeat: React.FC = () => {
     useIsAuth();
 
     const router = useRouter();
 
-    const [{}, uploadBeat] = useCreateBeatMutation();
+    const [{}, createBeat] = useCreateBeatMutation();
 
     const [data, setData] = useState({
         title: "",
@@ -37,36 +38,55 @@ const CreateBeat: React.FC = () => {
 
     const [currentStep, setCurrentStep] = useState(0);
 
+    const [showProgress, setShowProgress] = useState(false);
+    const [progressPercent, setProgressPercent] = useState(0);
+
     const handleSubmit = async (values: CreateBeatFormDataType) => {
         const { file, ...gqlValues } = values;
 
-        if (file) {
-            const formData = new FormData();
-            formData.append("file", file);
-            console.log("sending file");
-            const res = await axios
-                .post("http://localhost:1337/upload-beat", formData, {
-                    headers: { "content-type": "mutipart/form-data" }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    return;
-                });
-            if (res) {
-                const key = res.data.toString();
-                const { error, data } = await uploadBeat({
-                    options: { ...gqlValues, s3Key: key }
-                });
-                if (!error) {
-                    if (data?.createBeat.errors) {
-                        console.log("errors: ", data.createBeat.errors);
-                    } else if (data?.createBeat.beat) {
-                        router.push(`/beat/${data.createBeat.beat.id}`);
-                    }
+        if (!file) {
+            console.log("no file selected");
+            return;
+        }
+
+        const fileExtension = file.name.split(".").slice(-1)[0];
+
+        // get secureURL from server
+        const url = await axios
+            .put("http://localhost:1337/s3url", { extension: fileExtension })
+            .then((res: any) => {
+                return res.data.url;
+            });
+
+        // url to file on s3 used for backend db entry of beat
+        const fileS3Url = url.split("?")[0];
+
+        // show progress bar now
+        setShowProgress(true);
+        // put file to aws using secureURL
+        await axios
+            .put(url, file, {
+                headers: { "content-type": "multipart/form-data" },
+                onUploadProgress: (e: ProgressEvent) => {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    setProgressPercent(percent);
                 }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        // // if put req to aws is successful, post gql uploadBeat mutation
+        const { error, data } = await createBeat({
+            options: { ...gqlValues, s3Key: fileS3Url }
+        });
+        if (!error) {
+            if (data?.createBeat.errors) {
+                console.log("errors: ", data.createBeat.errors);
+            } else if (data?.createBeat.beat) {
+                setShowProgress(false);
+                router.push(`/beat/${data.createBeat.beat.id}`);
             }
-        } else {
-            console.log("you have to upload a file...");
         }
     };
 
@@ -95,6 +115,7 @@ const CreateBeat: React.FC = () => {
             <Heading size="lg" mb={6}>
                 Create new beat
             </Heading>
+            {!showProgress ? null : <ProgressMain percent={progressPercent} />}
             <FormProgressStepper currentStep={currentStep} steps={steps} />
             <Box>{steps[currentStep]}</Box>
         </Layout>
