@@ -1,6 +1,9 @@
 // General imports
 import { useEffect, useRef, useState } from "react";
+// Type imports
 import { BeatsResponseSimpleFragment } from "../generated/graphql";
+// Util imports
+import { floatToTime } from "../utils/floatToTime";
 
 interface UseAudioProps {
     beats: BeatsResponseSimpleFragment["beats"];
@@ -10,14 +13,10 @@ export const useAudio = ({ beats }: UseAudioProps) => {
     // playlist of all tracks on current page
     const [playlist, _] = useState<BeatsResponseSimpleFragment["beats"]>(beats);
 
-    useEffect(() => {
-        console.log(playlist);
-    }, [playlist]);
-
     // current track in play position
     const [currentTrack, setCurrentTrack] = useState<number>(0);
 
-    const [metaData, setMetadata] = useState({ duration: "" });
+    const [metaData, setMetadata] = useState({ duration: "", name: "" });
 
     // current track playing or not?
     const [isPlaying, setIsPlaying] = useState(false);
@@ -25,25 +24,18 @@ export const useAudio = ({ beats }: UseAudioProps) => {
     // audio component ref
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    const floatToTime = (num: number) => {
-        let mins = Math.floor(num / 60);
-        let secs = Math.round(num % 60);
-        let secsStr = secs.toString();
-        if (secsStr.length < 2) {
-            secsStr = "0" + secsStr;
-        }
-        return [mins, secsStr].join(":");
-    };
-
     const handleMetadata = () => {
-        setMetadata({ duration: floatToTime(audioRef.current!.duration) });
+        setMetadata({
+            duration: floatToTime(audioRef.current!.duration),
+            name: beats[currentTrack].title
+        });
     };
 
     useEffect(() => {
-        if (audioRef.current?.duration !== NaN) {
+        setTimeout(() => {
             handleMetadata();
-        }
-    }, [audioRef, currentTrack]);
+        }, 500);
+    }, [currentTrack]);
 
     // toggle current track playing/pausing
     const togglePlaying = () => {
@@ -62,27 +54,61 @@ export const useAudio = ({ beats }: UseAudioProps) => {
 
     // play prev track function
     const skipPrevTrack = () => {
-        if (isPlaying) {
-            togglePlaying();
-        }
-        setCurrentTrack((prev) => {
-            return currentTrack > 0 ? prev - 1 : playlist.length - 1;
-        });
-        if (!isPlaying) {
-            togglePlaying();
+        if (audioRef.current) {
+            if (isPlaying) {
+                setIsPlaying(false);
+            }
+            if (audioRef.current.currentTime > 0) {
+                audioRef.current.currentTime = 0;
+            } else {
+                setCurrentTrack((prev) => {
+                    return currentTrack > 0 ? prev - 1 : playlist.length - 1;
+                });
+            }
+            setTimeout(() => {
+                setIsPlaying(true);
+            }, 50);
         }
     };
 
     // play next track function
     const skipNextTrack = () => {
         if (isPlaying) {
-            togglePlaying();
+            setIsPlaying(false);
         }
         setCurrentTrack((prev) => {
             return currentTrack < playlist.length - 1 ? prev + 1 : 0;
         });
-        if (!isPlaying) {
-            togglePlaying();
+
+        setTimeout(() => {
+            setIsPlaying(true);
+        }, 50);
+    };
+
+    const replayTrack = () => {
+        if (isPlaying) {
+            setIsPlaying(false);
+        }
+        if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+        }
+        setTimeout(() => {
+            setIsPlaying(true);
+        }, 100);
+    };
+
+    const setCurrentTime = (val: number) => {
+        if (audioRef.current) {
+            audioRef.current.currentTime = val;
+        }
+    };
+
+    const setPlaybackSpeed = (val: number) => {
+        if (val < 0.25 || val > 2.0) {
+            return;
+        }
+        if (audioRef.current) {
+            audioRef.current.playbackRate = val;
         }
     };
 
@@ -94,6 +120,9 @@ export const useAudio = ({ beats }: UseAudioProps) => {
         togglePlaying,
         skipPrevTrack,
         skipNextTrack,
+        replayTrack,
+        setCurrentTime,
+        setPlaybackSpeed,
         audioRef,
         metaData
     };
