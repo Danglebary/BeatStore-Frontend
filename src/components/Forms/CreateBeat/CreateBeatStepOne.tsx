@@ -15,7 +15,7 @@ interface StepOneProps {
     data: CreateBeatFormDataType;
 }
 
-const StepOne: React.FC<StepOneProps> = ({ next, data }) => {
+export const StepOne: React.FC<StepOneProps> = ({ next, data }) => {
     const handleSubmit = (values: CreateBeatFormDataType) => {
         next(values);
     };
@@ -33,6 +33,9 @@ const StepOne: React.FC<StepOneProps> = ({ next, data }) => {
                             label="What should we call this beat?"
                             labelColor="cyan.500"
                             placeholder="'Drip Too Hard'..."
+                            autoCapitalize="on"
+                            autoComplete="off"
+                            required
                         />
                         <InputField
                             variant="flushed"
@@ -42,6 +45,9 @@ const StepOne: React.FC<StepOneProps> = ({ next, data }) => {
                             label="What genre best describes this beat?"
                             labelColor="cyan.500"
                             placeholder="e.g 'Pop'..."
+                            autoCapitalize="words"
+                            autoComplete="false"
+                            required
                         />
                         <FileInputField
                             accept="audio/*"
@@ -57,5 +63,3 @@ const StepOne: React.FC<StepOneProps> = ({ next, data }) => {
         </Formik>
     );
 };
-
-export default StepOne;

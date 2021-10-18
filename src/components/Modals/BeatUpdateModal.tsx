@@ -34,7 +34,7 @@ interface BeatUpdateModalProps {
     onClose: () => void;
 }
 
-const BeatUpdateModal: React.FC<BeatUpdateModalProps> = ({
+export const BeatUpdateModal: React.FC<BeatUpdateModalProps> = ({
     beat,
     isOpen,
     onClose
@@ -113,5 +113,3 @@ const BeatUpdateModal: React.FC<BeatUpdateModalProps> = ({
         </Modal>
     );
 };
-
-export default BeatUpdateModal;

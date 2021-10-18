@@ -18,7 +18,7 @@ interface StepTwoProps {
     data: CreateBeatFormDataType;
 }
 
-const StepTwo: React.FC<StepTwoProps> = ({ prev, next, data }) => {
+export const StepTwo: React.FC<StepTwoProps> = ({ prev, next, data }) => {
     const handleSubmit = (values: CreateBeatFormDataType) => {
         next(values);
     };
@@ -36,7 +36,8 @@ const StepTwo: React.FC<StepTwoProps> = ({ prev, next, data }) => {
                             type="number"
                             label="What is the bpm?"
                             labelColor="cyan.500"
-                            placeholder="'140...'"
+                            placeholder="140"
+                            required
                         />
                         <SelectField
                             width="100%"
@@ -71,5 +72,3 @@ const StepTwo: React.FC<StepTwoProps> = ({ prev, next, data }) => {
         </Formik>
     );
 };
-
-export default StepTwo;

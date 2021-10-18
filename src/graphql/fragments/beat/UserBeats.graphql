@@ -1,18 +1,14 @@
-fragment BeatMain on Beat {
+fragment UserBeats on Beat {
     id
     title
     genre
     bpm
     key
     tags
+    s3Key
     likesCount
     likeStatus
-    s3Key
     creatorId
-    creator {
-        id
-        username
-    }
-    createdAt
     updatedAt
+    createdAt
 }

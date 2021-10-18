@@ -13,7 +13,7 @@ interface StepThreeProps {
     data: CreateBeatFormDataType;
 }
 
-const StepThree: React.FC<StepThreeProps> = ({ prev, next, data }) => {
+export const StepThree: React.FC<StepThreeProps> = ({ prev, next, data }) => {
     // format key string without underscore, capital first letter, and # symbol
     const keyParts = data.key.split("_");
     let keyToShow = "";
@@ -58,5 +58,3 @@ const StepThree: React.FC<StepThreeProps> = ({ prev, next, data }) => {
         </Box>
     );
 };
-
-export default StepThree;

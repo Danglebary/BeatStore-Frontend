@@ -3,12 +3,12 @@ import React from "react";
 import NextLink from "next/link";
 // GraphQL type imports
 import {
-    BeatMainFragment,
     useLikeBeatMutation,
-    useMeQuery
+    useMeQuery,
+    UserBeatsFragment
 } from "../../generated/graphql";
 // Chakra imports
-import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Link } from "@chakra-ui/layout";
 import { useDisclosure } from "@chakra-ui/hooks";
 // Custom imports
 import { BeatEditButton } from "../Buttons/BeatEditButton";
@@ -17,11 +17,11 @@ import { BeatUpdateModal } from "../Modals/BeatUpdateModal";
 import { isServer } from "../../utils/isServer";
 import { useRouter } from "next/router";
 
-interface BeatCardMainProps {
-    beat: BeatMainFragment;
+interface BeatCardUserProps {
+    beat: UserBeatsFragment;
 }
 
-export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
+export const BeatCardUser: React.FC<BeatCardUserProps> = ({ beat }) => {
     const router = useRouter();
     // me query info
     const [{ data: meData }] = useMeQuery({
@@ -62,7 +62,7 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                         </Link>
                     </NextLink>
                     <Box ml="auto">
-                        {meData?.me?.id !== beat.creator.id ? (
+                        {meData?.me?.id !== beat.creatorId ? (
                             <BeatLikeButton
                                 likeStatus={beat.likeStatus}
                                 handleClick={handleLikeBeat}
@@ -71,15 +71,6 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                             <BeatEditButton onOpen={editOnOpen} />
                         )}
                     </Box>
-                </Flex>
-                {}
-                <Flex mt={2} align="center" gridGap={4}>
-                    <Text>
-                        Prod.{" "}
-                        <NextLink href={`/${beat.creator.username}`}>
-                            <Link>{beat.creator.username}</Link>
-                        </NextLink>
-                    </Text>
                 </Flex>
             </Box>
         </>

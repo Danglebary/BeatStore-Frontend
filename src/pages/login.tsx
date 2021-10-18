@@ -15,6 +15,7 @@ import { Layout } from "../components/Wrappers/Layout";
 import { InputField } from "../components/InputFields/InputField";
 import { toErrorMap } from "../utils/toErrorMap";
 import { Flex, Link } from "@chakra-ui/layout";
+import { Box } from "@chakra-ui/react";
 
 interface loginProps {}
 
@@ -42,25 +43,41 @@ const Login: React.FC<loginProps> = ({}) => {
             >
                 {({ isSubmitting }) => (
                     <Form>
-                        <InputField
-                            name="usernameOrEmail"
-                            label="username or email"
-                            placeholder="username or email"
-                        />
-                        <InputField
-                            name="password"
-                            label="password"
-                            placeholder="password"
-                            type="password"
-                        />
-                        <Flex mt="0.5em">
-                            <NextLink href="/forgot-password">
-                                <Link ml="auto">forgot password?</Link>
-                            </NextLink>
+                        <Flex flexDirection="column" gridGap={6}>
+                            <InputField
+                                name="usernameOrEmail"
+                                variant="flushed"
+                                label="username or email"
+                                labelColor="cyan.500"
+                                placeholder="username or email"
+                                autoCapitalize="off"
+                                autoCorrect="off"
+                                required
+                            />
+                            <InputField
+                                name="password"
+                                variant="flushed"
+                                label="password"
+                                labelColor="cyan.500"
+                                placeholder="password"
+                                type="password"
+                                required
+                            />
+                            <Flex justify="space-between">
+                                <Button
+                                    maxW="max-content"
+                                    type="submit"
+                                    isLoading={isSubmitting}
+                                >
+                                    login
+                                </Button>
+                                <Box mt="0.5em">
+                                    <NextLink href="/forgot-password">
+                                        <Link ml="auto">forgot password?</Link>
+                                    </NextLink>
+                                </Box>
+                            </Flex>
                         </Flex>
-                        <Button type="submit" isLoading={isSubmitting}>
-                            login
-                        </Button>
                     </Form>
                 )}
             </Formik>

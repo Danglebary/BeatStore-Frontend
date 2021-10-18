@@ -5,7 +5,7 @@ import theme from "../theme";
 export default class Document extends NextDocument {
     render() {
         return (
-            <Html>
+            <Html lang="en">
                 <Head />
                 <body style={{ overscrollBehavior: "none" }}>
                     <ColorModeScript

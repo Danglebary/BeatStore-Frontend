@@ -81,7 +81,6 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
-  removeUser: Scalars['Boolean'];
   updateBeat: CreateBeatResponse;
 };
 
@@ -119,11 +118,6 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   options: RegisterUserInput;
-};
-
-
-export type MutationRemoveUserArgs = {
-  userId: Scalars['Float'];
 };
 
 
@@ -170,7 +164,6 @@ export type QueryUserByUsernameArgs = {
 
 export type RegisterUserInput = {
   email: Scalars['String'];
-  location?: Maybe<Scalars['String']>;
   password: Scalars['String'];
   username: Scalars['String'];
 };
@@ -186,15 +179,19 @@ export type UpdateBeatInput = {
 
 export type User = {
   __typename?: 'User';
-  beats: Array<Beat>;
+  beats: PaginatedBeatsResponse;
   createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Int'];
-  isAdmin: Scalars['Boolean'];
   likes: Array<Like>;
-  location: Scalars['String'];
   updatedAt: Scalars['String'];
   username: Scalars['String'];
+};
+
+
+export type UserBeatsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 export type UserResponse = {
@@ -207,13 +204,13 @@ export type ErrorSimpleFragment = { __typename?: 'FieldError', field: string, me
 
 export type BeatFullFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } };
 
-export type BeatMainFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, s3Key: string, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } };
+export type BeatMainFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, s3Key: string, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } };
 
-export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string };
+export type BeatSimpleFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, s3Key: string, createdAt: string, updatedAt: string };
 
-export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, s3Key: string, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> };
+export type BeatsResponseSimpleFragment = { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, s3Key: string, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> };
 
-export type UserFullFragment = { __typename?: 'User', id: number, username: string, email: string, location: string, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string }> };
+export type UserBeatsFragment = { __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, s3Key: string, likesCount: number, likeStatus: boolean, creatorId: number, updatedAt: string, createdAt: string };
 
 export type UserResponseSimpleFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> };
 
@@ -224,7 +221,7 @@ export type CreateBeatMutationVariables = Exact<{
 }>;
 
 
-export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string }> } };
+export type CreateBeatMutation = { __typename?: 'Mutation', createBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, s3Key: string, createdAt: string, updatedAt: string }> } };
 
 export type DeleteBeatMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -245,7 +242,7 @@ export type UpdateBeatMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBeatMutation = { __typename?: 'Mutation', updateBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string }> } };
+export type UpdateBeatMutation = { __typename?: 'Mutation', updateBeat: { __typename?: 'CreateBeatResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, beat?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, s3Key: string, createdAt: string, updatedAt: string }> } };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -294,7 +291,7 @@ export type BeatsQueryVariables = Exact<{
 }>;
 
 
-export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, s3Key: string, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> } };
+export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, s3Key: string, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -303,10 +300,12 @@ export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', 
 
 export type UserByUsernameQueryVariables = Exact<{
   username: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+  cursor?: Maybe<Scalars['String']>;
 }>;
 
 
-export type UserByUsernameQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', id: number, username: string, email: string, location: string, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, createdAt: string, updatedAt: string }> }> };
+export type UserByUsernameQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', id: number, username: string, createdAt: string, updatedAt: string, beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, s3Key: string, likesCount: number, likeStatus: boolean, creatorId: number, updatedAt: string, createdAt: string }> } }> };
 
 export const BeatFullFragmentDoc = gql`
     fragment BeatFull on Beat {
@@ -326,6 +325,20 @@ export const BeatFullFragmentDoc = gql`
   updatedAt
 }
     `;
+export const BeatSimpleFragmentDoc = gql`
+    fragment BeatSimple on Beat {
+  id
+  title
+  genre
+  bpm
+  key
+  tags
+  likesCount
+  s3Key
+  createdAt
+  updatedAt
+}
+    `;
 export const BeatMainFragmentDoc = gql`
     fragment BeatMain on Beat {
   id
@@ -337,6 +350,7 @@ export const BeatMainFragmentDoc = gql`
   likesCount
   likeStatus
   s3Key
+  creatorId
   creator {
     id
     username
@@ -353,30 +367,22 @@ export const BeatsResponseSimpleFragmentDoc = gql`
   }
 }
     ${BeatMainFragmentDoc}`;
-export const BeatSimpleFragmentDoc = gql`
-    fragment BeatSimple on Beat {
+export const UserBeatsFragmentDoc = gql`
+    fragment UserBeats on Beat {
   id
   title
   genre
   bpm
   key
   tags
+  s3Key
   likesCount
-  createdAt
+  likeStatus
+  creatorId
   updatedAt
+  createdAt
 }
     `;
-export const UserFullFragmentDoc = gql`
-    fragment UserFull on User {
-  id
-  username
-  email
-  location
-  beats {
-    ...BeatSimple
-  }
-}
-    ${BeatSimpleFragmentDoc}`;
 export const ErrorSimpleFragmentDoc = gql`
     fragment ErrorSimple on FieldError {
   field
@@ -542,12 +548,21 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const UserByUsernameDocument = gql`
-    query UserByUsername($username: String!) {
+    query UserByUsername($username: String!, $limit: Int, $cursor: String) {
   userByUsername(username: $username) {
-    ...UserFull
+    id
+    username
+    createdAt
+    updatedAt
+    beats(limit: $limit, cursor: $cursor) {
+      hasMore
+      beats {
+        ...UserBeats
+      }
+    }
   }
 }
-    ${UserFullFragmentDoc}`;
+    ${UserBeatsFragmentDoc}`;
 
 export function useUserByUsernameQuery(options: Omit<Urql.UseQueryArgs<UserByUsernameQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<UserByUsernameQuery>({ query: UserByUsernameDocument, ...options });

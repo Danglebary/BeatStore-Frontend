@@ -6,19 +6,18 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 // GraphQL imports
 import { useBeatsQuery } from "../generated/graphql";
 // Chakra imports
-import { Heading, Stack } from "@chakra-ui/layout";
+import { Heading } from "@chakra-ui/layout";
 // Custom imports
 import { Layout } from "../components/Wrappers/Layout";
 import { Button } from "@chakra-ui/button";
-import { BeatCardMain } from "../components/Cards/BeatCardMain";
-import { AudioMain } from "../components/Audio/AudioMain";
+import { BeatSection } from "../components/Sections/BeatSectionMain";
 
-const Index: React.FC<{}> = () => {
+const Index: React.FC = () => {
     const [variables, setVariables] = useState({
         limit: 10,
         cursor: null as string | null
     });
-    const [{ data, fetching }] = useBeatsQuery({
+    const [{ data, error, fetching }] = useBeatsQuery({
         variables
     });
 
@@ -31,27 +30,24 @@ const Index: React.FC<{}> = () => {
 
     let body = null;
 
-    if (fetching && !data) {
+    if (fetching) {
         body = <div>loading...</div>;
-    } else if (!fetching && !data) {
+    } else if (error) {
         body = <div>could not load beats 😭</div>;
-    } else {
+    } else if (data) {
         body = (
-            <Stack spacing={8}>
-                {data && data.beats.beats.length > 0 ? (
-                    <AudioMain beats={data.beats.beats} />
-                ) : null}
-                {data!.beats.beats.map((beat) =>
-                    !beat ? null : (
-                        <BeatCardMain beat={beat} key={beat.title + beat.id} />
-                    )
-                )}
-                {data && data.beats.hasMore ? (
-                    <Button onClick={handleLoadMore} isLoading={fetching}>
+            <>
+                <BeatSection beats={data!.beats.beats} />
+                {data.beats.hasMore ? (
+                    <Button
+                        mt={6}
+                        onClick={handleLoadMore}
+                        isLoading={fetching}
+                    >
                         load more
                     </Button>
                 ) : null}
-            </Stack>
+            </>
         );
     }
 

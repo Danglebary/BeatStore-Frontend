@@ -1,17 +1,15 @@
 // General imports
 import { useEffect, useRef, useState } from "react";
-// Type imports
-import { BeatsResponseSimpleFragment } from "../generated/graphql";
 // Util imports
-import { floatToTime } from "../utils/floatToTime";
+import { useFloatToTime } from "./useFloatToTime";
 
 interface UseAudioProps {
-    beats: BeatsResponseSimpleFragment["beats"];
+    beats: { url: string; title: string }[];
 }
 
 export const useAudio = ({ beats }: UseAudioProps) => {
     // playlist of all tracks on current page
-    const [playlist, _] = useState<BeatsResponseSimpleFragment["beats"]>(beats);
+    const [playlist, _] = useState<{ url: string; title: string }[]>(beats);
 
     // current track in play position
     const [currentTrack, setCurrentTrack] = useState<number>(0);
@@ -23,6 +21,8 @@ export const useAudio = ({ beats }: UseAudioProps) => {
 
     // audio component ref
     const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    const { floatToTime } = useFloatToTime();
 
     const handleMetadata = () => {
         setMetadata({
@@ -58,7 +58,7 @@ export const useAudio = ({ beats }: UseAudioProps) => {
             if (isPlaying) {
                 setIsPlaying(false);
             }
-            if (audioRef.current.currentTime > 0) {
+            if (audioRef.current.currentTime > 5) {
                 audioRef.current.currentTime = 0;
             } else {
                 setCurrentTrack((prev) => {

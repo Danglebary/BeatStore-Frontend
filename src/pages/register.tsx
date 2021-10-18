@@ -8,6 +8,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 // GraphQL imports
 import { useRegisterMutation } from "../generated/graphql";
 // Chakra imports
+import { Flex } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 // Custom imports
 import { Layout } from "../components/Wrappers/Layout";
@@ -34,25 +35,44 @@ const Register: React.FC = () => {
             >
                 {({ isSubmitting }) => (
                     <Form>
-                        <InputField
-                            name="email"
-                            label="email"
-                            placeholder="email@email.com"
-                        />
-                        <InputField
-                            name="username"
-                            label="username"
-                            placeholder="username"
-                        />
-                        <InputField
-                            name="password"
-                            label="password"
-                            placeholder="password"
-                            type="password"
-                        />
-                        <Button type="submit" isLoading={isSubmitting}>
-                            register
-                        </Button>
+                        <Flex flexDirection="column" gridGap={6}>
+                            <InputField
+                                name="email"
+                                variant="flushed"
+                                label="email"
+                                labelColor="cyan.500"
+                                placeholder="email@email.com"
+                                autoCapitalize="off"
+                                required
+                            />
+                            <InputField
+                                name="username"
+                                variant="flushed"
+                                label="username"
+                                labelColor="cyan.500"
+                                placeholder="username"
+                                autoCapitalize="off"
+                                autoComplete="off"
+                                autoCorrect="off"
+                                required
+                            />
+                            <InputField
+                                name="password"
+                                variant="flushed"
+                                label="password"
+                                labelColor="cyan.500"
+                                placeholder="password"
+                                type="password"
+                                required
+                            />
+                            <Button
+                                maxW="max-content"
+                                type="submit"
+                                isLoading={isSubmitting}
+                            >
+                                register
+                            </Button>
+                        </Flex>
                     </Form>
                 )}
             </Formik>

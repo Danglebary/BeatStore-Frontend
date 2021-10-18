@@ -6,6 +6,7 @@ import {
     FormLabel,
     Input,
     Tag,
+    Text,
     TagCloseButton,
     TagLabel
 } from "@chakra-ui/react";
@@ -87,9 +88,9 @@ export const TagInputField: React.FC<TagInputFieldProps> = ({
         <Flex direction="column" gridGap={0.5}>
             <FormLabel htmlFor="tagInput" textColor={labelColor}>
                 {label}{" "}
-                <span style={{ color: "grey" }}>
-                    (seperated by space, max of 10)
-                </span>
+                <Text display="inline" color="whiteAlpha.700">
+                    (max 10)
+                </Text>
             </FormLabel>
             <Input
                 variant="flushed"

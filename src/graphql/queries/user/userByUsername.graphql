@@ -1,0 +1,14 @@
+query UserByUsername($username: String!, $limit: Int, $cursor: String) {
+    userByUsername(username: $username) {
+        id
+        username
+        createdAt
+        updatedAt
+        beats(limit: $limit, cursor: $cursor) {
+            hasMore
+            beats {
+                ...UserBeats
+            }
+        }
+    }
+}

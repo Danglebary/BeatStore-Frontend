@@ -7,17 +7,16 @@ import { PlayerPlayPauseButton } from "../Buttons/PlayerPlayPauseButton";
 import { PlayerLoopButton } from "../Buttons/PlayerLoopButton";
 import { PlayerPreviousButton } from "../Buttons/PlayerPreviousButton";
 import { PlayerNextButton } from "../Buttons/PlayerNextButton";
+import { PlayerPlaybackSpeedbutton } from "../Buttons/PlayerPlaybackSpeedbutton";
+import { PlayerSlider } from "../Sliders/PlayerSlider";
 // Type imports
-import { BeatsResponseSimpleFragment } from "../../generated/graphql";
 import { LoopOptions } from "../../types/playerTypes";
 // Hook imports
 import { useAudio } from "../../hooks/useAudio";
-import { PlayerSlider } from "../Sliders/PlayerSlider";
-import { floatToTime } from "../../utils/floatToTime";
-import { PlayerPlaybackSpeedbutton } from "../Buttons/PlayerPlaybackSpeedbutton";
+import { useFloatToTime } from "../../hooks/useFloatToTime";
 
 interface AudioMainProps {
-    beats: BeatsResponseSimpleFragment["beats"];
+    beats: { url: string; title: string }[];
 }
 
 export const AudioMain: React.FC<AudioMainProps> = ({ beats }) => {
@@ -48,34 +47,41 @@ export const AudioMain: React.FC<AudioMainProps> = ({ beats }) => {
         }
     };
 
-    const url = beats[currentTrack].s3Key;
+    const url = beats[currentTrack].url;
+
+    const { floatToTime } = useFloatToTime();
 
     return (
         <Flex
             position="fixed"
-            flexDirection="column"
+            flexDirection="row"
             alignSelf="center"
-            width="800px"
-            paddingLeft={4}
-            paddingRight={4}
-            bottom={6}
+            justify="space-evenly"
+            align="center"
+            width="full"
+            left={0}
+            bottom={0}
+            padding={4}
             gridGap={4}
+            zIndex={4}
         >
-            <Heading fontSize="lg">now playing: {metaData.name}</Heading>
-            {!audioRef.current ? null : (
-                <Flex gridGap={4}>
-                    <Box width={10}>{floatToTime(audioTime)}</Box>
-                    <PlayerSlider
-                        isPlaying={isPlaying}
-                        toggleAudio={togglePlaying}
-                        totalDur={audioRef.current.duration}
-                        currentTime={audioTime}
-                        setTime={setCurrentTime}
-                    />
-                    <Box width={10}>{metaData.duration}</Box>
-                </Flex>
-            )}
-            <Flex justify="center" align="center" gridGap={4}>
+            <Flex width="90%" gridGap={4}>
+                <Heading minW="max-content" fontSize="lg">
+                    now playing: {metaData.name}
+                </Heading>
+                {!audioRef.current ? null : (
+                    <>
+                        <Box width={10}>{floatToTime(audioTime)}</Box>
+                        <PlayerSlider
+                            isPlaying={isPlaying}
+                            toggleAudio={togglePlaying}
+                            totalDur={audioRef.current.duration}
+                            currentTime={audioTime}
+                            setTime={setCurrentTime}
+                        />
+                        <Box width={10}>{metaData.duration}</Box>
+                    </>
+                )}
                 <PlayerPreviousButton onClick={skipPrevTrack} />
                 <PlayerPlayPauseButton
                     isPlaying={isPlaying}

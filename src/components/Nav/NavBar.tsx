@@ -41,10 +41,7 @@ export const NavBar: React.FC = () => {
                         create beat
                     </Button>
                 </NextLink>
-                <NextLink
-                    href="/user/[username]"
-                    as={`/user/${data.me.username}`}
-                >
+                <NextLink href="/[username]" as={`/${data.me.username}`}>
                     <Button variant="link">{data.me.username}</Button>
                 </NextLink>
                 <Button

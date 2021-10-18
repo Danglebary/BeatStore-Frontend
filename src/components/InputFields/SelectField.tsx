@@ -30,7 +30,13 @@ export const SelectField: React.FC<SelectInputFieldProps> = ({
             <FormLabel htmlFor={field.name} textColor={labelColor}>
                 {label}
             </FormLabel>
-            <Select {...field} {...props} id={field.name}>
+            <Select
+                {...field}
+                {...props}
+                id={field.name}
+                borderBottom="1px solid"
+                borderBottomColor="whiteAlpha.300"
+            >
                 {options.map(({ option, value }) => (
                     <option key={value} value={value} id={value}>
                         {option}

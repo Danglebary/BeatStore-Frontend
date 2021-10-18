@@ -6,6 +6,7 @@ fragment BeatSimple on Beat {
     key
     tags
     likesCount
+    s3Key
     createdAt
     updatedAt
 }

@@ -1,9 +1,0 @@
-fragment UserFull on User {
-    id
-    username
-    email
-    location
-    beats {
-        ...BeatSimple
-    }
-}

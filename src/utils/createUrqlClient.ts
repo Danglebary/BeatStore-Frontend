@@ -23,6 +23,7 @@ import {
 // Custom imports
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { isServer } from "./isServer";
+import { devtoolsExchange } from "@urql/devtools";
 
 const errorExchange: Exchange =
     ({ forward }) =>
@@ -47,18 +48,16 @@ const cursorPagination = (): Resolver => {
         const fieldInfos = allFields.filter(
             (info) => info.fieldName === fieldName
         );
-        const size = fieldInfos.length;
 
+        const size = fieldInfos.length;
         if (size === 0) return undefined;
 
-        const results: string[] = [];
-
         const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
-        const isInCache = cache.resolve(
-            cache.resolve(entityKey, fieldKey) as string,
-            "beats"
-        );
-        info.partial = !isInCache;
+        const isInCacheEntityKey = cache.resolve(entityKey, fieldKey) as string;
+        const isInCacheResult = cache.resolve(isInCacheEntityKey, "beats");
+
+        info.partial = !isInCacheResult;
+        const results: string[] = [];
         let hasMore = true;
         fieldInfos.forEach((fi) => {
             const key = cache.resolve(entityKey, fi.fieldKey) as string;
@@ -97,6 +96,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                 : undefined
         },
         exchanges: [
+            devtoolsExchange,
             dedupExchange,
             cacheExchange({
                 keys: {
@@ -104,6 +104,9 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                     BeatResponse: () => null
                 },
                 resolvers: {
+                    User: {
+                        beats: cursorPagination()
+                    },
                     Query: {
                         beats: cursorPagination()
                     }
