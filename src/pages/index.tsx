@@ -1,5 +1,5 @@
 // General imports
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // Urql imports
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
@@ -11,6 +11,7 @@ import { Heading } from "@chakra-ui/layout";
 import { Layout } from "../components/Wrappers/Layout";
 import { Button } from "@chakra-ui/button";
 import { BeatSection } from "../components/Sections/BeatSectionMain";
+import { useAudioContext } from "../contexts/audioContext";
 
 const Index: React.FC = () => {
     const [variables, setVariables] = useState({
@@ -27,6 +28,8 @@ const Index: React.FC = () => {
             cursor: data!.beats.beats[data!.beats.beats.length - 1].createdAt
         });
     };
+
+    const audioContext = useAudioContext();
 
     let body = null;
 
@@ -50,6 +53,20 @@ const Index: React.FC = () => {
             </>
         );
     }
+
+    useEffect(() => {
+        if (data && data.beats) {
+            if (audioContext) {
+                audioContext.addToPlaylist(data.beats.beats);
+            }
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (audioContext) {
+            console.log(audioContext.playlist);
+        }
+    }, [audioContext]);
 
     return (
         <Layout varient="regular">
