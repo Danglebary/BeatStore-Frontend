@@ -16,15 +16,15 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({}) => {
         <>
             <Tooltip label="toggle between light and dark mode!">
                 <IconButton
+                    variant="ghost"
+                    _hover={{ backgroundColor: "transparent" }}
+                    _active={{ backgroundColor: "transparent" }}
+                    color="white"
                     size="md"
-                    fontSize="x-large"
-                    position="fixed"
-                    top={4}
-                    right={6}
+                    fontSize="larger"
                     aria-label="toggle between light and dark mode"
                     icon={colorMode === "light" ? <BsSun /> : <BsMoon />}
                     onClick={toggleColorMode}
-                    zIndex={5}
                 />
             </Tooltip>
         </>
