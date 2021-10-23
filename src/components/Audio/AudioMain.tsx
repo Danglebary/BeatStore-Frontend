@@ -15,11 +15,11 @@ import { LoopOptions } from "../../types/playerTypes";
 import { useAudio } from "../../hooks/useAudio";
 import { useFloatToTime } from "../../hooks/useFloatToTime";
 
-interface AudioMainProps {
+interface Props {
     beats: { url: string; title: string }[];
 }
 
-export const AudioMain: React.FC<AudioMainProps> = ({ beats }) => {
+export const AudioMain: React.FC<Props> = ({ beats }) => {
     const {
         currentTrack,
         isPlaying,
@@ -59,16 +59,18 @@ export const AudioMain: React.FC<AudioMainProps> = ({ beats }) => {
             justify="space-evenly"
             align="center"
             width="full"
+            backgroundColor="purple.800"
             left={0}
             bottom={0}
             padding={4}
             gridGap={4}
             zIndex={4}
         >
-            <Flex width="90%" gridGap={4}>
+            <Flex width="90%" gridGap={4} align="center" color="white">
                 <Heading minW="max-content" fontSize="lg">
-                    now playing: {metaData.name}
+                    now playing:
                 </Heading>
+                <Box minWidth="max-content">{metaData.name}</Box>
                 {!audioRef.current ? null : (
                     <>
                         <Box width={10}>{floatToTime(audioTime)}</Box>
