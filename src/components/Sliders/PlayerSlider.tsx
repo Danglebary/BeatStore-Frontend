@@ -41,7 +41,7 @@ export const PlayerSlider: React.FC<PlayerSliderProps> = ({
             onChange={handleSliderchange}
             focusThumbOnChange={false}
         >
-            <SliderTrack>
+            <SliderTrack backgroundColor="whiteAlpha.500">
                 <SliderFilledTrack />
             </SliderTrack>
             <SliderThumb />
