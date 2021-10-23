@@ -16,8 +16,8 @@ export const UserProfile: React.FC = () => {
         typeof router.query.username === "string" ? router.query.username : "";
 
     const [variables, setVariables] = useState({
-        username: username,
-        limit: 1,
+        username,
+        limit: 10,
         cursor: null as string | null
     });
 
@@ -36,10 +36,10 @@ export const UserProfile: React.FC = () => {
         });
     };
 
-    let userBody = null;
+    let body = null;
 
     if (error) {
-        userBody = (
+        body = (
             <div>
                 <div>Could not find user</div>
                 <div>{error.message}</div>
@@ -48,13 +48,14 @@ export const UserProfile: React.FC = () => {
     } else if (data && data.userByUsername) {
         const userData = data.userByUsername;
 
-        userBody = (
+        body = (
             <Box>
                 <Heading mb={10}>{userData.username}</Heading>
                 <Stack spacing={8}>
                     {userData.beats.beats.map((beat) =>
                         !beat ? null : (
                             <BeatCardUser
+                                username={username}
                                 beat={beat}
                                 key={beat.title + beat.id}
                             />
@@ -70,7 +71,7 @@ export const UserProfile: React.FC = () => {
         );
     }
 
-    return <Layout varient="regular">{userBody}</Layout>;
+    return <Layout varient="regular">{body}</Layout>;
 };
 
 export default withUrqlClient(createUrqlClient, { ssr: true })(UserProfile);
