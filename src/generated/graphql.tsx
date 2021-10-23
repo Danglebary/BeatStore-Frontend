@@ -136,6 +136,7 @@ export type Query = {
   beat?: Maybe<Beat>;
   beats: PaginatedBeatsResponse;
   me?: Maybe<User>;
+  singleBeatByTitleAndUsername?: Maybe<Beat>;
   userById?: Maybe<User>;
   userByUsername?: Maybe<User>;
   users: Array<User>;
@@ -150,6 +151,12 @@ export type QueryBeatArgs = {
 export type QueryBeatsArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit?: Maybe<Scalars['Int']>;
+};
+
+
+export type QuerySingleBeatByTitleAndUsernameArgs = {
+  beatTitle: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
@@ -292,6 +299,14 @@ export type BeatsQueryVariables = Exact<{
 
 
 export type BeatsQuery = { __typename?: 'Query', beats: { __typename?: 'PaginatedBeatsResponse', hasMore: boolean, beats: Array<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, likesCount: number, likeStatus: boolean, s3Key: string, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'User', id: number, username: string } }> } };
+
+export type SingleBeatByTitleAndUsernameQueryVariables = Exact<{
+  beatTitle: Scalars['String'];
+  username: Scalars['String'];
+}>;
+
+
+export type SingleBeatByTitleAndUsernameQuery = { __typename?: 'Query', singleBeatByTitleAndUsername?: Maybe<{ __typename?: 'Beat', id: number, title: string, genre: string, bpm: number, key: string, tags: Array<string>, s3Key: string, likesCount: number, likeStatus: boolean, creatorId: number, updatedAt: string, createdAt: string }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -535,6 +550,17 @@ export const BeatsDocument = gql`
 
 export function useBeatsQuery(options: Omit<Urql.UseQueryArgs<BeatsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<BeatsQuery>({ query: BeatsDocument, ...options });
+};
+export const SingleBeatByTitleAndUsernameDocument = gql`
+    query SingleBeatByTitleAndUsername($beatTitle: String!, $username: String!) {
+  singleBeatByTitleAndUsername(beatTitle: $beatTitle, username: $username) {
+    ...UserBeats
+  }
+}
+    ${UserBeatsFragmentDoc}`;
+
+export function useSingleBeatByTitleAndUsernameQuery(options: Omit<Urql.UseQueryArgs<SingleBeatByTitleAndUsernameQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<SingleBeatByTitleAndUsernameQuery>({ query: SingleBeatByTitleAndUsernameDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {

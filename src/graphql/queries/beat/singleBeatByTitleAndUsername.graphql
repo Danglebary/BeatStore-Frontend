@@ -1,0 +1,5 @@
+query SingleBeatByTitleAndUsername($beatTitle: String!, $username: String!) {
+    singleBeatByTitleAndUsername(beatTitle: $beatTitle, username: $username) {
+        ...UserBeats
+    }
+}
