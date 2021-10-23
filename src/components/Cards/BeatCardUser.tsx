@@ -19,9 +19,13 @@ import { useRouter } from "next/router";
 
 interface BeatCardUserProps {
     beat: UserBeatsFragment;
+    username: string;
 }
 
-export const BeatCardUser: React.FC<BeatCardUserProps> = ({ beat }) => {
+export const BeatCardUser: React.FC<BeatCardUserProps> = ({
+    beat,
+    username
+}) => {
     const router = useRouter();
     // me query info
     const [{ data: meData }] = useMeQuery({
@@ -56,7 +60,10 @@ export const BeatCardUser: React.FC<BeatCardUserProps> = ({ beat }) => {
             />
             <Box p={5} shadow="md" borderWidth="1px" borderRadius="0.5em">
                 <Flex>
-                    <NextLink href="/beat/[id]" as={`/beat/${beat.id}`}>
+                    <NextLink
+                        href="/[username]/[id]/"
+                        as={`/${username}/${beat.title.replace(" ", "-")}/`}
+                    >
                         <Link>
                             <Heading fontSize="x-large">{beat.title}</Heading>
                         </Link>
