@@ -8,13 +8,13 @@ import {
     ButtonProps
 } from "@chakra-ui/react";
 
-type IconButtonMainProps = ButtonProps & {
+type Props = ButtonProps & {
     icon: IconButtonProps["icon"];
     label: string;
     onClick?: () => void;
 };
 
-export const IconButtonMain: React.FC<IconButtonMainProps> = ({
+export const IconButtonMain: React.FC<Props> = ({
     icon,
     label,
     onClick,
@@ -27,6 +27,9 @@ export const IconButtonMain: React.FC<IconButtonMainProps> = ({
                 fontSize={props.fontSize ? props.fontSize : "x-large"}
                 aria-label={label}
                 icon={icon}
+                variant="ghost"
+                _hover={{ backgroundColor: "transparent" }}
+                _active={{ backgroundColor: "transparent" }}
                 onClick={onClick}
             />
         </Tooltip>

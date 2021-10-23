@@ -4,15 +4,12 @@ import { MdRepeat, MdRepeatOn, MdRepeatOneOn } from "react-icons/md";
 import { LoopOptions } from "../../types/playerTypes";
 import { IconButtonMain } from "./IconButtonMain";
 
-interface PlayerLoopButtonProps {
+interface Props {
     state: LoopOptions;
     onClick: React.Dispatch<React.SetStateAction<LoopOptions>>;
 }
 
-export const PlayerLoopButton: React.FC<PlayerLoopButtonProps> = ({
-    state,
-    onClick
-}) => {
+export const PlayerLoopButton: React.FC<Props> = ({ state, onClick }) => {
     const handleLoopclick = () => {
         if (state === LoopOptions.NONE) {
             onClick(LoopOptions.ALL);

@@ -5,12 +5,12 @@ import { AiOutlinePauseCircle, AiOutlinePlayCircle } from "react-icons/ai";
 // Custom imports
 import { IconButtonMain } from "./IconButtonMain";
 
-interface PlayerPlayPauseButtonProps {
+interface Props {
     isPlaying: boolean;
     togglePlaying: () => void;
 }
 
-export const PlayerPlayPauseButton: React.FC<PlayerPlayPauseButtonProps> = ({
+export const PlayerPlayPauseButton: React.FC<Props> = ({
     isPlaying,
     togglePlaying
 }) => {

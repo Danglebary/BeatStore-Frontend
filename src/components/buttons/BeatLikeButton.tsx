@@ -5,12 +5,12 @@ import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 // Custom imports
 import { IconButtonMain } from "./IconButtonMain";
 
-interface BeatLikeButtonProps {
+interface Props {
     likeStatus: boolean;
     handleClick: () => void;
 }
 
-export const BeatLikeButton: React.FC<BeatLikeButtonProps> = ({
+export const BeatLikeButton: React.FC<Props> = ({
     likeStatus,
     handleClick
 }) => {

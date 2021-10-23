@@ -2,13 +2,11 @@ import React from "react";
 import { AiOutlineLeftCircle } from "react-icons/ai";
 import { IconButtonMain } from "./IconButtonMain";
 
-interface PlayerPreviousButtonProps {
+interface Props {
     onClick: () => void;
 }
 
-export const PlayerPreviousButton: React.FC<PlayerPreviousButtonProps> = ({
-    onClick
-}) => {
+export const PlayerPreviousButton: React.FC<Props> = ({ onClick }) => {
     return (
         <IconButtonMain
             label="play previous track"

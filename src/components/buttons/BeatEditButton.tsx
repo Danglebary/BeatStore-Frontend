@@ -5,11 +5,11 @@ import { BiEdit } from "react-icons/bi";
 // Custom imports
 import { IconButtonMain } from "./IconButtonMain";
 
-interface BeatEditButtonProps {
+interface Props {
     onOpen: () => void;
 }
 
-export const BeatEditButton: React.FC<BeatEditButtonProps> = ({ onOpen }) => {
+export const BeatEditButton: React.FC<Props> = ({ onOpen }) => {
     return (
         <IconButtonMain
             label="edit beat info"
