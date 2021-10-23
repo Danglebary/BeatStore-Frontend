@@ -2,7 +2,7 @@
 
 Frontend implementation for a social media / e-commerce app for instrumental music.
 
-# STACK
+## Stack
 
 -   Next
 -   Typescript
