@@ -55,12 +55,31 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                 onClose={editOnClose}
             />
             <Box p={5} shadow="md" borderWidth="1px" borderRadius="0.5em">
-                <Flex>
-                    <NextLink href="/beat/[id]" as={`/beat/${beat.id}`}>
-                        <Link>
-                            <Heading fontSize="x-large">{beat.title}</Heading>
-                        </Link>
-                    </NextLink>
+                <Flex align="center">
+                    <Flex align="baseline" gridGap={2}>
+                        <NextLink
+                            href="/[username]/[title]"
+                            as={`/${beat.creator.username}/${beat.title.replace(
+                                " ",
+                                "-"
+                            )}`}
+                        >
+                            <Link>
+                                <Heading fontSize="x-large">
+                                    {beat.title}
+                                </Heading>
+                            </Link>
+                        </NextLink>
+                        <Text>
+                            Prod.{" "}
+                            <NextLink
+                                href="/[username]/"
+                                as={`/${beat.creator.username}/`}
+                            >
+                                <Link>{beat.creator.username}</Link>
+                            </NextLink>
+                        </Text>
+                    </Flex>
                     <Box ml="auto">
                         {meData?.me?.id !== beat.creator.id ? (
                             <BeatLikeButton
@@ -71,15 +90,6 @@ export const BeatCardMain: React.FC<BeatCardMainProps> = ({ beat }) => {
                             <BeatEditButton onOpen={editOnOpen} />
                         )}
                     </Box>
-                </Flex>
-                {}
-                <Flex mt={2} align="center" gridGap={4}>
-                    <Text>
-                        Prod.{" "}
-                        <NextLink href={`/${beat.creator.username}`}>
-                            <Link>{beat.creator.username}</Link>
-                        </NextLink>
-                    </Text>
                 </Flex>
             </Box>
         </>
