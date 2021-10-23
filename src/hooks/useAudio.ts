@@ -54,6 +54,9 @@ export const useAudio = ({ beats }: UseAudioProps) => {
 
     // play prev track function
     const skipPrevTrack = () => {
+        if (playlist.length < 2) {
+            return;
+        }
         if (audioRef.current) {
             if (isPlaying) {
                 setIsPlaying(false);
@@ -73,6 +76,9 @@ export const useAudio = ({ beats }: UseAudioProps) => {
 
     // play next track function
     const skipNextTrack = () => {
+        if (playlist.length < 2) {
+            return;
+        }
         if (isPlaying) {
             setIsPlaying(false);
         }
